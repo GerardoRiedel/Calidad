@@ -89,7 +89,7 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
                          </b>
                      </div>
                      <div class="col-lg-12" align="center"><br></div>
-                     <input type="checkbox" name="enviar"> <label style="color: blue;margin-top: -10px">Enviar Respuesta a paciente</label>
+                     
                      <?php IF(!empty($calidad)){ ?>
                         <div class="col-lg-12" align="center">
                             <input type="checkbox" name="enviar"> <label style="color: blue;margin-top: -10px">Enviar Respuesta a paciente</label>

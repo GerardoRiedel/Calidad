@@ -482,7 +482,7 @@ return number_format( substr ( $rut, 0 , -1 ) , 0, "", ".") . '-' . substr ( $ru
                     }
                     Highcharts.chart('container', {
                         title: {
-                            text: 'Registro total de reclamos',
+                            text: 'Registro total de reclamos CETEP',
                             x: -20 //center
                         },
                         subtitle: {

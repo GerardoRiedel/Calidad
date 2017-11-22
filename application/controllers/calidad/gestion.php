@@ -510,6 +510,10 @@ class gestion extends CI_Controller {
         $data['listarUnidades'] = $this->parametros_model->dameUnidadesApoyo();
             //die(var_dump($jefe));
         //die;
+        IF($colaborador->idunidad==='31')$colaborador->idunidad=4;
+        ELSEIF($colaborador->idunidad==='25')$colaborador->idunidad=3;
+        ELSEIF($id_usuario==='141')$colaborador->idunidad=30;
+             
         IF(!empty($colaborador)){
             //IF(strtoupper($jefe->nombre) === strtoupper($colaborador->nombre) && strtoupper($jefe->apellidoPaterno) === strtoupper($colaborador->apellidoPaterno)  || $colaborador->id === '57' || $colaborador->id === '64' || $colaborador->id === '285' || $colaborador->id === '38'){
             IF(!empty($jefe)  || $colaborador->id === '57' || $colaborador->id === '64' || $colaborador->id === '38'){
@@ -939,8 +943,11 @@ class gestion extends CI_Controller {
      public function listar_reclamos_jefe()
     {
         $colaborador = $this->parametros_model->dameColaborador($this->session->userdata('id_usuario'));
-              
+             IF($colaborador->idunidad==='31')$colaborador->idunidad=4;
+             ELSEIF($colaborador->idunidad==='25')$colaborador->idunidad=3;
+             ELSEIF($this->session->userdata('id_usuario')==='141')$colaborador->idunidad=30;
         IF(empty($colaborador->idunidad)){
+           
             $uspUnidad = $this->parametros_model->dameUnidadRevisoras($this->session->userdata('id_usuario'));
             $this->parametros_model->plaUnidad = $uspUnidad->uspUnidad;
             $this->parametros_model->plaNombre = $uspUnidad->uspNombre;
@@ -949,6 +956,7 @@ class gestion extends CI_Controller {
         }ELSE {
             $plaUnidad = $colaborador->idunidad;
             IF($plaUnidad==='25')$plaUnidad=3;
+            ELSEIF($plaUnidad==='31')$plaUnidad=4;
             $this->parametros_model->plaUnidad = $plaUnidad;
             $this->parametros_model->plaNombre = $colaborador->nombre;
             $this->parametros_model->plaApellido = $colaborador->apellidoPaterno;
