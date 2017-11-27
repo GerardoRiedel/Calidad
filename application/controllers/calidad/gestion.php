@@ -510,9 +510,9 @@ class gestion extends CI_Controller {
         $data['listarUnidades'] = $this->parametros_model->dameUnidadesApoyo();
             //die(var_dump($jefe));
         //die;
-        IF($colaborador->idunidad==='31')$colaborador->idunidad=4;
-        ELSEIF($colaborador->idunidad==='25')$colaborador->idunidad=3;
-        ELSEIF($id_usuario==='141')$colaborador->idunidad=30;
+        IF(!empty($colaborador->idunidad) && $colaborador->idunidad==='31')$colaborador->idunidad=4;
+        ELSEIF(!empty($colaborador->idunidad) && $colaborador->idunidad==='25')$colaborador->idunidad=3;
+        ELSEIF(!empty($id_usuario) && $id_usuario==='141')$colaborador->idunidad=30;
              
         IF(!empty($colaborador)){
             //IF(strtoupper($jefe->nombre) === strtoupper($colaborador->nombre) && strtoupper($jefe->apellidoPaterno) === strtoupper($colaborador->apellidoPaterno)  || $colaborador->id === '57' || $colaborador->id === '64' || $colaborador->id === '285' || $colaborador->id === '38'){
@@ -571,7 +571,12 @@ class gestion extends CI_Controller {
         $this->parametros_model->plaAccion = $this->input->post('accion');
         
         $seguimiento = $this->input->post('seguimiento');
-    //    IF(!empty($seguimiento)){
+        $apoyo = $this->input->post('plaUnidadDeApoyo');
+        IF(!empty($apoyo)){
+            $apoyo = explode('_', $apoyo);
+            $this->parametros_model->plaUnidadDeApoyo = $apoyo[0];
+            $this->parametros_model->plaUnidadDeApoyoId = $apoyo[1];
+        }
             $this->parametros_model->plaSeguimiento = $seguimiento;
             $this->parametros_model->plaProveedor = $this->input->post('proveedor');
             $this->parametros_model->plaCliente = $this->input->post('cliente');
@@ -580,7 +585,6 @@ class gestion extends CI_Controller {
             $this->parametros_model->plaNoAplica = $this->input->post('noaplica');
             $this->parametros_model->plaNoAplicaText = $this->input->post('plaNoAplicaText');
             $this->parametros_model->plaUnidadDeApoyoCheck = $this->input->post('plaUnidadDeApoyoCheck');
-            $this->parametros_model->plaUnidadDeApoyo = $this->input->post('plaUnidadDeApoyo');
             $this->parametros_model->plaPaciente = $this->input->post('plaPaciente');
     //    }
         $this->parametros_model->guardarPlanilla();

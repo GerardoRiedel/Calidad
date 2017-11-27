@@ -29,7 +29,7 @@ class Parametros_model extends CI_Model
     public function dameUnidadesApoyo()
     {
         $db = $this->load->database('capacitacion', TRUE);
-        $return =  $db->select('descripcion')
+        $return =  $db->select('idunidad,descripcion')
                         ->from('unidades')
                         ->where('categoria','apoyo')
                         ->where('estado','A')
@@ -113,10 +113,12 @@ class Parametros_model extends CI_Model
     {
         IF($unidad === '25')$unidad = 3;
         IF($unidad === '5')$unidad = 30;
+        
+       
         return $this->db->select('*')
                         ->from('planillas')
-                        ->where('plaEstado',1)
-                        ->where('plaUnidad',$unidad)
+                        ->where('plaEstado = 1 and plaUnidad = '.$unidad)
+                        ->or_where('plaEstado = 1 and plaUnidadDeApoyoId = '.$unidad)
                         ->get()
                         ->result();
     }
