@@ -794,6 +794,7 @@ class gestion extends CI_Controller {
         $director = $this->parametros_model->dameDirectorUnidad($unidad->id);
         
         $directorNombre = $director->nombre.' '.$director->apellidoPaterno.' '.$director->apellidoMaterno;
+        $directorNombre = strtoupper($directorNombre);
         $directorFirma = $director->director;
         
         

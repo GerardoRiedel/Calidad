@@ -57,7 +57,7 @@ IF(empty($submenu)){$submenu='';}//die($this->session->userdata('id_usuario') );
             
             
 <!--ADMINISTRADOR-->
-            <?php }ELSEIF($this->session->userdata('perfil') == '3' || $this->session->userdata('id_usuario') == '10001'){?>
+            <?php }ELSEIF($this->session->userdata('perfil') == '3' || $this->session->userdata('id_usuario') == '10001' || $this->session->userdata('id_usuario') == '37'){?>
 <?php //die('ese');?>
             <!--VISITA-->
             <li class="submenu <?php if($menu === 'gestion' )echo "active open" ?>">
