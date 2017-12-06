@@ -1020,6 +1020,8 @@ class gestion extends CI_Controller {
         </table>
         <br>
         ";
+        
+ /*       
         $this->load->library('Pdf');
         $pdf = new Pdf('P', 'mm', 'letter', true, 'UTF-8', false);
         
@@ -1098,7 +1100,7 @@ class gestion extends CI_Controller {
     
     
     
-
+*/
  
         
         
