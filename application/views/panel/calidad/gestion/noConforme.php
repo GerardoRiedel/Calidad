@@ -85,7 +85,7 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
                         <label>Acción Inmediata</label> 
                     </div>
                     <div class='col-lg-12'>
-                        <textarea name="accion" style=" width: 100%; height: 100px" placeholder="Describa Aquí La Acción Inmediata Realizada" <?php IF(!empty($planilla)) echo 'readonly'; ?>><?php IF(!empty($planilla->plaAccion))echo $planilla->plaAccion; ?></textarea>
+                        <textarea name="accion" style=" width: 100%; height: 100px" placeholder="Describa Aquí La Acción Inmediata Realizada" <?php //IF(!empty($planilla) && $planilla != '0') echo 'readonly'; ?>><?php IF(!empty($planilla->plaAccion))echo $planilla->plaAccion; ?></textarea>
                     </div>
                     <div class='col-lg-12'><br></div>
                     

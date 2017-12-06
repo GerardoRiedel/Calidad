@@ -32,7 +32,14 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
                 
                 <div id="divFicha"><!--COMIENZO TRATAMIENTO DE FICHA-->
                     <div class="col-lg-12" ><br><br><br></div>
-                    <?php $fecha = new datetime(date('Y-m-d')); $fecha = $fecha->format('d F Y'); ?>
+                    <?php
+                   
+                         $fecha = new datetime(date('Y-m-d')); 
+                         $mes = $fecha->format('m'); if($mes==='10')$mes='Octubre';elseif($mes==='11')$mes='Noviembre';elseif($mes==='12')$mes='Diciembre';elseif($mes==='01')$mes='Enero';elseif($mes==='02')$mes='Febrero';elseif($mes==='03')$mes='Marzo';elseif($mes==='04')$mes='Abril';elseif($mes==='05')$mes='Mayo';elseif($mes==='06')$mes='Junio';elseif($mes==='07')$mes='Julio';elseif($mes==='08')$mes='Agosto';elseif($mes==='09')$mes='Septiembre';
+                         $dia = $fecha->format('d'); 
+                         $ano= $fecha->format('Y'); 
+                         $fecha = $dia.' de '.$mes.' de '.$ano;
+                    ?>
                     <div class="col-lg-1"></div>
                     <div class="col-lg-11">&nbsp;
                         <img src="<?php echo base_url();?>../assets/img/logo_vertical_cetep.png" class="logo" style="width:120px">&nbsp;&nbsp;&nbsp;
@@ -46,7 +53,13 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
                         Estimado(a) Sr(a) <b><?php echo $reclamo->recNombre.' '.$reclamo->recApePat ?></b><br><br>
                         Domicilio: <?php echo $reclamo->recDomicilio.', '.$reclamo->comNombre ?>.<br><br><br>
                     </div>
-                    <?php $fecha = new datetime($reclamo->recFecha); $fecha = $fecha->format('d F Y'); ?>
+                    <?php 
+                        $fecha = new datetime($reclamo->recFecha); 
+                        $mes = $fecha->format('m'); if($mes==='10')$mes='Octubre';elseif($mes==='11')$mes='Noviembre';elseif($mes==='12')$mes='Diciembre';elseif($mes==='01')$mes='Enero';elseif($mes==='02')$mes='Febrero';elseif($mes==='03')$mes='Marzo';elseif($mes==='04')$mes='Abril';elseif($mes==='05')$mes='Mayo';elseif($mes==='06')$mes='Junio';elseif($mes==='07')$mes='Julio';elseif($mes==='08')$mes='Agosto';elseif($mes==='09')$mes='Septiembre';
+                        $dia = $fecha->format('d'); 
+                        $ano= $fecha->format('Y'); 
+                        $fecha = $dia.' de '.$mes.' de '.$ano;
+                     ?>
                     
                     <div class="col-lg-1"></div>
                     <div class="col-lg-11">
@@ -60,18 +73,13 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
                     </div>
                     <div class='col-lg-1'></div>
                     <div class='col-lg-10'>
-                        <textarea name="reclamo" style=" width: 100%; height: 300px" placeholder="Ingrese aquí el resumen del reclamo " required="true">
-                            <?php IF(!empty($reclamo) && empty($respuesta)){echo $reclamo->recHechos.'.  PETICION: '.$reclamo->recPeticion;} ELSE echo $respuesta->resHecho?>
+                        <textarea name="reclamo" style=" width: 100%; height: 300px" placeholder="Ingrese aquí el resumen del reclamo " required="true"><?php IF(!empty($reclamo) && empty($respuesta)){echo $reclamo->recHechos.'.  PETICION: '.$reclamo->recPeticion;} ELSE echo $respuesta->resHecho?>
                         </textarea>
                     </div>
                     
                     <div class="col-lg-12"><br></div>
-                    <div class="col-lg-1"></div>
-                    <div class="col-lg-11">
-                        Lamentamos los inconvenientes que estos hechos pudieran haberle ocasionado y sentimos muy sinceramente el no haber respondido a sus expectativas, su reclamo ha sido registrado y revisado.
-                        <br><br>
-                        Habiendo revisado su caso, podemos informar que:
-                    </div>
+                    
+                    
                     <div class='col-lg-1'></div>
                     <div class="col-lg-11">
                         <label class="titulo">Respuesta</label> 
@@ -96,8 +104,10 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
                         </div>
                      <?php } ?>
                     <div class="col-lg-12" align="center">
-                        <?php  IF(empty($finalizado)){ ?>
-                    <?php echo form_submit('','Guardar','class="btn btn-primary btn-sm btnCetep"');?>
+                        <?php  IF(empty($finalizado) && empty($calidad)){ ?>
+                    <?php echo form_submit('','Guardar y Validar','class="btn btn-primary btn-sm btnCetep"');?>
+                        <?php } ELSEIF(empty($finalizado) && !empty($calidad)){ ?>
+                         <?php echo form_submit('','Guardar y Enviar','class="btn btn-primary btn-sm btnCetep"');?>
                         <?php } ?>
                     <?php echo form_close();?>
                 </div>

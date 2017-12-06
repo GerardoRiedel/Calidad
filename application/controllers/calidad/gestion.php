@@ -235,6 +235,7 @@ class gestion extends CI_Controller {
             ELSEIF($uni === '2')$unidadDescripcion= 'UNIDAD GESTION HOSPITALARIO';
             ELSEIF($uni === '3')$unidadDescripcion= 'UNIDAD PERITAJE CLÍNICO';
             ELSEIF($uni === '30')$unidadDescripcion= 'SALUD MENTAL LABORAL';
+            ELSEIF($uni === '13')$unidadDescripcion= 'MIRANDES CLINICA';
             ELSE $unidadDescripcion = $uni;
         $correoJefe = $this->sugerencia_model->dameCorreoUnidad($uni);
         
@@ -552,12 +553,12 @@ class gestion extends CI_Controller {
             
         
         
-        IF(empty($colaborador->idunidad)){
+        IF(empty($colaborador->idunidad) && $this->session->userdata('id_usuario') != '64' && $this->session->userdata('id_usuario') != '38'){
             $uspUnidad = $this->parametros_model->dameUnidadRevisoras($this->session->userdata('id_usuario'));
             $this->parametros_model->plaUnidad = $uspUnidad->uspUnidad;
             $this->parametros_model->plaNombre = $uspUnidad->uspNombre;
             $this->parametros_model->plaApellido = $uspUnidad->uspApellidoP;
-        }ELSE {
+        }ELSEIF($this->session->userdata('id_usuario') != '64' && $this->session->userdata('id_usuario') != '38') {
             $plaUnidad = $colaborador->idunidad;
             IF($plaUnidad==='25')$plaUnidad=3;
             $this->parametros_model->plaUnidad = $plaUnidad;
@@ -690,47 +691,89 @@ class gestion extends CI_Controller {
         
         $enviar = $this->input->post('enviar');
         IF($enviar !== 'on' || empty($enviar))$enviar='off';
+        $reclamo = $this->reclamo_model->dameUno($recId);
         //die($recId);
-        //die(var_dump($enviar));
-        $colaborador    = $this->parametros_model->dameColaborador($usuario);
-        //die(var_dump($colaborador));
-        //IF(empty($colaborador))die;
-        //$enviar='on';
-        IF(($enviar === 'off' && !empty($recId) && empty($colaborador)) || ($enviar === 'off' && !empty($recId) && $colaborador->id !== '57' && $colaborador->id !== '64' && $colaborador->id !== '38' )){
-            $this->reclamo_model->recId = $recId;
-            $this->reclamo_model->recEstado = 4;
-            $this->reclamo_model->recFechaModificacion = date('Y-m-d H:i:s');
-            
-            $this->reclamo_model->guardar();
-            
-           $mail = 'calidad@cetep.cl';//DESDE
-            $header = 'From: ' . $mail . " \r\n";
-            $header .= "X-Mailer: PHP/" . phpversion() . " \r\n";
-            $header .= "Mime-Version: 1.0 \r\n";
-            $header .= "Content-Type: text/html";
-            $resumen=" Estimado departamento de calidad, se ha generado la respuesta a requerimiento N°".$recId.", favor revisar y posteriormente enviar resolución a paciente.<br><br>"
-                    . "Este correo se ha generado automaticamente, favor no responder.<br><br>"
-                    . "Atte<br>"
-                    . "Cetep";
-            $headers = "MIME-Version: 1.0\r\n"; 
-            $headers .= "Content-type: text/html; charset=utf-8\r\n"; 
-            $headers .= "From: Calidad <calidad@cetep.cl>\r\n"; //dirección del remitente 
-            //$headers .= "Bcc: griedel@cetep.cl";
-            $headers .= "bcc: griedel@cetep.cl\r\n";
         
-            $destinatario = 'calidad@cetep.cl';
-            //$destinatario = 'griedel@cetep.cl';
-            $asunto = 'Gestion de Jefe de Unidad a Reclamo N° '.$recId;
-           
-            //die($resumen);
-            mail($destinatario,$asunto,$resumen,$headers) ;
-            IF(empty($colaborador)){
-                $this->load->view('panel/layout/head');
-                $this->load->view('panel/modals/guardar_respuesta');
-            }
-            ELSE $this->listar_reclamos();
+      //die($usuario);
+        $colaborador    = $this->parametros_model->dameColaborador($usuario);
+     //  die(var_dump($colaborador));
+       
+        IF(!empty($colaborador->correo) && $reclamo[1][0]->correoDirector === $colaborador->correo){$this->reclamo_model->recAutorizado = 'si'; $autorizado = 'si';}
+        ELSE $autorizado = 'no';
+        
+        
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// ENVIAR
+ //     $enviar='on';
+        IF(($enviar === 'off' && !empty($recId) && empty($colaborador) && $autorizado==='si' ) || ($autorizado==='si' && $enviar === 'off' && !empty($recId) && $colaborador->id !== '57' && $colaborador->id !== '64' && $colaborador->id !== '38' )){
+                    $this->reclamo_model->recId = $recId;
+                    $this->reclamo_model->recEstado = 4;
+                    $this->reclamo_model->recFechaModificacion = date('Y-m-d H:i:s');
+
+                    $this->reclamo_model->guardar();
+
+                   $mail = 'calidad@cetep.cl';//DESDE
+                    $header = 'From: ' . $mail . " \r\n";
+                    $header .= "X-Mailer: PHP/" . phpversion() . " \r\n";
+                    $header .= "Mime-Version: 1.0 \r\n";
+                    $header .= "Content-Type: text/html";
+                    $resumen=" Estimado departamento de calidad, <br><br>Se ha generado la respuesta a requerimiento N°".$recId.", favor revisar y posteriormente enviar resolución a paciente.<br><br>"
+                            . "Este correo se ha generado automaticamente, favor no responder.<br><br>"
+                            . "Atte<br>"
+                            . "Cetep";
+                    $headers = "MIME-Version: 1.0\r\n"; 
+                    $headers .= "Content-type: text/html; charset=utf-8\r\n"; 
+                    $headers .= "From: Calidad <calidad@cetep.cl>\r\n"; //dirección del remitente 
+                    //$headers .= "Bcc: griedel@cetep.cl";
+                    $headers .= "bcc: griedel@cetep.cl\r\n";
+
+                    $destinatario = 'calidad@cetep.cl';
+                    //$destinatario = 'griedel@cetep.cl';
+                    $asunto = 'Gestion de Director de Unidad a Reclamo N° '.$recId;
+
+                    //die($resumen);
+                    mail($destinatario,$asunto,$resumen,$headers) ;
+                    IF(empty($colaborador)){
+                        $this->load->view('panel/layout/head');
+                        $this->load->view('panel/modals/guardar_respuesta');
+                    }
+                    ELSE $this->listar_reclamos();
+            
+        }ELSEIF(($enviar === 'off' && !empty($recId) && empty($colaborador) && $autorizado==='no') || ($autorizado==='no' && $enviar === 'off' && !empty($recId) && $colaborador->id !== '57' && $colaborador->id !== '64' && $colaborador->id !== '38' )){
+                    $this->reclamo_model->recId = $recId;
+                    $this->reclamo_model->recEstado = 6;
+                    $this->reclamo_model->recFechaModificacion = date('Y-m-d H:i:s');
+
+                    $this->reclamo_model->guardar();
+
+                    $mail = 'calidad@cetep.cl';//DESDE
+                    $header = 'From: ' . $mail . " \r\n";
+                    $header .= "X-Mailer: PHP/" . phpversion() . " \r\n";
+                    $header .= "Mime-Version: 1.0 \r\n";
+                    $header .= "Content-Type: text/html";
+                    $resumen=" Estimado director, <br><br>La jefatura de su unidad ha generado la respuesta a requerimiento N°".$recId.", favor revisar y validar resolución.<br>"
+                            . 'Para responderlo favor ingresar a la plataforma a traves de su <b>intracetep</b>-><b>unidad de calidad</b><br>'
+                            . "Este correo se ha generado automaticamente, favor no responder.<br><br>"
+                             . "Atte<br>"
+                            . "Cetep";
+                    $headers = "MIME-Version: 1.0\r\n"; 
+                    $headers .= "Content-type: text/html; charset=utf-8\r\n"; 
+                    $headers .= "From: Calidad <calidad@cetep.cl>\r\n"; 
+                    $headers .= "cc: calidad@cetep.cl\r\n";
+                    $headers .= "bcc: griedel@cetep.cl\r\n";
+
+                    $destinatario = $reclamo[1][0]->correoDirector;
+                    $asunto = 'Gestion de Jefe de Unidad a Reclamo N° '.$recId;
+
+                    mail($destinatario,$asunto,$resumen,$headers) ;
+                    IF(empty($colaborador)){
+                        $this->load->view('panel/layout/head');
+                        $this->load->view('panel/modals/guardar_respuesta');
+                    }
+                    ELSE $this->listar_reclamos();
             
         }ELSEIF($enviar === 'on' && !empty($recId) ){
+            
+            //die('a respuesta'); 
             $this->reclamo_model->recId = $recId;
             $this->reclamo_model->recEstado = 3;
             $this->reclamo_model->recFechaModificacion = date('Y-m-d H:i:s');
@@ -760,9 +803,20 @@ class gestion extends CI_Controller {
         $header .= "Content-Type: text/html";
         
         $fecha = new DateTime($respuesta->resFecha);
-        $fecha = $fecha->format('d-m-Y');
+        //$fecha = $fecha->format('d-m-Y');
+        $mes = $fecha->format('m'); if($mes==='10')$mes='Octubre';elseif($mes==='11')$mes='Noviembre';elseif($mes==='12')$mes='Diciembre';elseif($mes==='01')$mes='Enero';elseif($mes==='02')$mes='Febrero';elseif($mes==='03')$mes='Marzo';elseif($mes==='04')$mes='Abril';elseif($mes==='05')$mes='Mayo';elseif($mes==='06')$mes='Junio';elseif($mes==='07')$mes='Julio';elseif($mes==='08')$mes='Agosto';elseif($mes==='09')$mes='Septiembre';
+        $dia   = $fecha->format('d'); 
+        $ano= $fecha->format('Y'); 
+        $fecha = $dia.' de '.$mes.' de '.$ano;
+                        
+                        
         $fechaReclamo = new DateTime($reclamo->recFecha);
-        $fechaReclamo = $fechaReclamo->format('d-m-Y');
+        //$fechaReclamo = $fechaReclamo->format('d-m-Y');
+        $mes = $fechaReclamo->format('m'); if($mes==='10')$mes='Octubre';elseif($mes==='11')$mes='Noviembre';elseif($mes==='12')$mes='Diciembre';elseif($mes==='01')$mes='Enero';elseif($mes==='02')$mes='Febrero';elseif($mes==='03')$mes='Marzo';elseif($mes==='04')$mes='Abril';elseif($mes==='05')$mes='Mayo';elseif($mes==='06')$mes='Junio';elseif($mes==='07')$mes='Julio';elseif($mes==='08')$mes='Agosto';elseif($mes==='09')$mes='Septiembre';
+        $dia   = $fechaReclamo->format('d'); 
+        $ano= $fechaReclamo->format('Y'); 
+        $fechaReclamo = $dia.' de '.$mes.' de '.$ano;
+        
         
         $nombre = $reclamo->recNombre." ".$reclamo->recApePat." ".$reclamo->recApeMat;
         $area = strtoupper($unidad->descripcion);
@@ -801,7 +855,7 @@ class gestion extends CI_Controller {
         $correoJefe = $this->sugerencia_model->dameCorreoUnidad($unidad->id);
         //$hecho = $reclamo->recHechos;
         //$peticion = $reclamo->recPeticion;
-
+        
         $resumen="
         <table border='0'>
             <tr>
@@ -816,11 +870,12 @@ class gestion extends CI_Controller {
          $resumen .="
                 </td>
                 <td style='width:50px'></td>
-                <td style='width:100px'></td>
+                <td ></td>
             </tr>
             <tr>
-                <td>Fecha</td>
-                <td>".$fecha."</td>
+                <td></td>
+                <td></td>
+                <td style='width:250px'>Santiago, ".$fecha."</td>
             </tr>
         </table>
         
@@ -850,22 +905,15 @@ class gestion extends CI_Controller {
             <tr>
                 <td style='border:none' colspan='5'><br></td>
             </tr>
+            <tr>
+                <td colspan='5' style='border:none' align='justify' >En respuesta a su reclamo N° <b>".$reclamo->recId."</b> con fecha ".$fechaReclamo.", donde menciona: <br><br> <pre style='font-family: arial;font-size:14px'>".$respuestaHecho."</pre><br></td>
+            </tr>
+            <tr>
+                <td colspan='5' style='border:none'  align='justify' ><i><blockquote><pre>".$respuestaRespuesta."</pre></blockquote></i></td>
+            </tr>
             
-            
             <tr>
-                <td colspan='5' style='border:none' align='justify' >En respuesta a su reclamo N° <b>".$reclamo->recId."</b> con fecha ".$fechaReclamo.", donde menciona: <br><br> <i><blockquote><textarea style='border:none; width:100%; height:".$respuestaHechoLargo."px'>".$respuestaHecho."</textarea></blockquote></i><br></td>
-            </tr>
-            <tr>
-                <td colspan='5' style='border:none' align='justify' ><br>Lamentamos los inconvenientes que estos hechos pudieran haberle ocasionado y sentimos muy sinceramente el no haber respondido a sus expectativas, su reclamo ha sido registrado y revisado.<br><br></td>
-            </tr>
-            <tr>
-                <td colspan='5' style='border:none'  align='justify' >Habiendo revisado su caso, podemos informar que: <br><br> <i><blockquote><textarea style='border:none; width:100%; height:".$respuestaRespuestaLargo."px'>".$respuestaRespuesta."</textarea></blockquote></i></td>
-            </tr>
-            <tr>
-                <td colspan='5' style='border:none' align='justify' ><br>Agradecemos el que nos haya hecho llegar sus observaciones, esto nos permite poder seguir mejorando en nuestra calidad y servicio a nuestros clientes</td>
-            </tr>
-            <tr>
-                <td colspan='5' style='border:none;' align='justify' ><br><b>De conformidad a lo señalado en el reglamento del MINSAL sobre procedimientos de reclamo de la ley N°20.584, le informamos su facultad para recurrir ante la Superintendencia de Salud para presentar su reclamo.</b></td>
+                <td colspan='5' style='border:none;font-size:13px' align='justify' ><br><b>De conformidad a lo señalado en el reglamento del MINSAL sobre procedimientos de reclamo de la ley N°20.584, le informamos su facultad para recurrir ante la Superintendencia de Salud para presentar su reclamo.</b></td>
             </tr>
             
             <tr>
@@ -893,17 +941,178 @@ class gestion extends CI_Controller {
         <br>
         ";
 
+        
+        
+        
+        
+        
+        
+        
+        
+        
+     //   die($resumen);
+        
+        
+        
+        $resumenPDF="
+        <table border='0'>
+            <tr>
+                <td></td>
+                <td><br><br><br><br><br><br><br></td>
+                <td></td>
+                <td>Fecha ".$fecha."</td>
+                    
+            </tr>
+        </table>
+        
+        <table style='width:800px; border:none'>
+            <tr>
+                <td>De nuestra consideración:</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Estimado(a)</td>
+                <td>".$nombre."</td>
+            </tr>
+            <tr>
+                <td>Domicilio:<br></td>
+                <td>".$domicilio.", ".$comuna."</td>
+            </tr>
+           
+            </table>
+            
+
+            <table>
+                <tr>
+                    <td>En respuesta a su reclamo N° <b>".$reclamo->recId."</b> con fecha ".$fechaReclamo.", donde menciona: <br><br>".$respuestaHecho."<br></td>
+                </tr>
+                <tr>
+                    <td><br>Lamentamos los inconvenientes que estos hechos pudieran haberle ocasionado y sentimos muy sinceramente el no haber respondido a sus expectativas, su reclamo ha sido registrado y revisado.<br><br></td>
+                </tr>
+                <tr>
+                    <td>Habiendo revisado su caso, podemos informar que: <br><br> <i><blockquote>".$respuestaRespuesta."</blockquote></i></td>
+                </tr>
+                <tr>
+                    <td><br>Agradecemos el que nos haya hecho llegar sus observaciones, esto nos permite poder seguir mejorando en nuestra calidad y servicio a nuestros clientes</td>
+                </tr>
+                <tr>
+                    <td><br><b><h6>De conformidad a lo señalado en el reglamento del MINSAL sobre procedimientos de reclamo de la ley N°20.584, le informamos su facultad para recurrir ante la Superintendencia de Salud para presentar su reclamo.</h6></b></td>
+                </tr>
+            </table>
+            
+
+            <table>
+            <tr>
+                <td>
+                        <br><br><br><br><br><br>
+                 </td>
+                 <td></td>
+                 <td>
+                 </td>
+            </tr>
+            <tr>
+                <td>______________________<br>".$directorNombre."<br>Director Médico<br>".$area."
+                 </td>
+                 <td></td>
+                 <td>_____________________<br>Revisión Departamento de Calidad
+                 </td>
+            </tr>
+        </table>
+        <br>
+        ";
+        $this->load->library('Pdf');
+        $pdf = new Pdf('P', 'mm', 'letter', true, 'UTF-8', false);
+        
+        $pdf->setJPEGQuality(75);
+        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+        $pdf->setFontSubsetting(true);
+        $pdf->SetFont('', '', 12, '', true);
+        $pdf->AddPage();
+
+
+        $pdf->Image(base_url()."../assets/img/firmas/".$directorFirma.".jpg", 20, 200, 40, 40, 'JPG', '', '', false, 150, '', false, false, 1, false, false, false);
+        $pdf->Image(base_url()."../assets/img/calidad125.png", 138, 200, 40, 40, 'PNG', '', '', true, 150, '', false, false, 1, false, false, false);
+        
+        IF($area === 'MIRANDES HD y RH' || $area === 'MIRANDES CLINICA ' || $area === 'MIRANDES HD CONCEPCION' || $area === 'MIRANDES HD RANCAGUA' ){
+            $pdf->Image(base_url()."../assets/img/mirAndes.png", 20, 20, 40, 30, 'PNG', '', '', true, 150, '', false, false, 1, false, false, false);
+        }ELSE {
+            $pdf->Image(base_url()."../assets/img/logo_vertical_cetep.png", 20, 20, 40, 30, 'PNG', '', '', true, 150, '', false, false, 1, false, false, false);
+              
+        }
+        $pdf->writeHTMLCell($w = 0, $h = 0, $x = '', $y = '', $resumenPDF, $border = 0, $ln = 1, $fill = 0, $reseth = true, $align = '', $autopadding = true);
+        $nombre_archivo = "Reclamo".$reclamo->recId.".pdf";
+        $path = $_SERVER['DOCUMENT_ROOT'] .'/qa/calidad/temporales/';
+        $pdf->Output($path.$nombre_archivo, 'F');
+
+//////ENVIAR CORREO
+    $filename = $nombre_archivo;
+    $ruta_completa = $path.$filename;
+    $filename = $ruta_completa;
+    $subject = "Respuesta de reclamo"; 
+    $message = "Esta es el cuerpo de mensaje."; 
+    $email = "griedel@cetep.cl";
+    $email_to = $email;
+    $email_from = 'calidad@cetep.cl';
+	
+    
+  $separator = md5(time());
+
+    $eol = PHP_EOL;
+
+    $pdfdoc = file_get_contents($filename);
+    $attachment = chunk_split(base64_encode($pdfdoc));
+
+    $headers  = "From: \"Calidad\"<" . $email_from . ">".$eol;
+    $headers .= "MIME-Version: 1.0".$eol; 
+    $headers .= "Content-Type: multipart/mixed; boundary=\"".$separator."\"";
+
+    $body = "--".$separator.$eol;
+    $body .= "Content-Type: text/html; charset=\"utf-8\"".$eol;
+    $body .= "Content-Transfer-Encoding: 8bit".$eol.$eol;
+    $body .= $message.$eol;
+
+    // adjunto
+    $body .= "--".$separator.$eol;
+    $body .= "Content-Type: application/octet-stream; name=\"".$filename."\"".$eol;
+    $body .= "Content-Transfer-Encoding: base64".$eol;
+    $body .= "Content-Disposition: attachment".$eol.$eol;
+    $body .= $attachment.$eol;
+    $body .= "--".$separator."--";
+///////////////FALTAN MAS PRUEBAS FUNCIONA
+  //  $error_ocurred = mail($email_to, $subject, $body, $headers);
+ //   if(!$error_ocurred){
+ //       echo "<center>Ocurrio un problema al enviar su información, intente mas tarde.<br/>";
+ //       echo "Si el problema persiste contacte a un administrador.</center>";
+ //   }else{
+ //       echo "<center>Su informacion ha sido enviada correctamente a la direccion de email especificada.<br/>(sientase libre de cerrar esta ventana)</center>";
+ //   }
+    
+    
+    
+
+ 
+        
+        
+  ///////      die; ENVIAR¿?
         $headers = "MIME-Version: 1.0\r\n"; 
         $headers .= "Content-type: text/html; charset=utf-8\r\n"; 
         $headers .= "From: Calidad <calidad@cetep.cl>\r\n"; //dirección del remitente 
-        //$headers .= "Bcc: griedel@cetep.cl";
-        
          IF(!empty($correoJefe)){
             $correoJefe=$correoJefe->correoDirector.",".$correoJefe->correoJefe;
             $headers .= "bcc: griedel@cetep.cl,calidad@cetep.cl,cbarrera@cetep.cl,marcelapaz@cetep.cl,".$correoJefe."\r\n";
         }
         ELSE $headers .= "bcc: griedel@cetep.cl,calidad@cetep.cl,cbarrera@cetep.cl,marcelapaz@cetep.cl\r\n";
         
+        //$headers .= "Bcc: griedel@cetep.cl";
         //$headers .= "";
         //$headers .= "cc: griedel@cetep.cl";
         //$headers .= "cc: griedel@cetep.cl,calidad@cetep.cl,cbarrera@cetep.cl";
@@ -973,6 +1182,74 @@ class gestion extends CI_Controller {
         $data['submenu']    = "reclamos";
         $data['title']           = 'Listado de Reclamos';
         Layout_Helper::cargaVista($this,'listar_reclamos',$data,'ingresos');   
+    }
+    
+    
+    
+    
+    
+    
+    public function generar($resumen) {
+        $this->load->library('Pdf');
+        $pdf = new Pdf('P', 'mm', 'letter', true, 'UTF-8', false);
+        $pdf->SetCreator(PDF_CREATOR);
+        //$pdf->SetAuthor('Israel Parra');
+        //$pdf->SetTitle('Ejemplo de provincías con TCPDF');
+        //$pdf->SetSubject('Tutorial TCPDF');
+        //$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+ 
+// datos por defecto de cabecera, se pueden modificar en el archivo tcpdf_config_alt.php de libraries/config
+        //$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE . ' 001', PDF_HEADER_STRING, array(0, 64, 255), array(0, 64, 128));
+        $pdf->setFooterData($tc = array(0, 64, 0), $lc = array(0, 64, 128));
+ 
+// datos por defecto de cabecera, se pueden modificar en el archivo tcpdf_config.php de libraries/config
+        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+ 
+// se pueden modificar en el archivo tcpdf_config.php de libraries/config
+        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+ 
+// se pueden modificar en el archivo tcpdf_config.php de libraries/config
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+ 
+// se pueden modificar en el archivo tcpdf_config.php de libraries/config
+        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+ 
+//relación utilizada para ajustar la conversión de los píxeles
+        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+ 
+ 
+// ---------------------------------------------------------
+// establecer el modo de fuente por defecto
+        $pdf->setFontSubsetting(true);
+ 
+// Establecer el tipo de letra
+ 
+//Si tienes que imprimir carácteres ASCII estándar, puede utilizar las fuentes básicas como
+// Helvetica para reducir el tamaño del archivo.
+        $pdf->SetFont('freemono', '', 14, '', true);
+ 
+// Añadir una página
+// Este método tiene varias opciones, consulta la documentación para más información.
+        $pdf->AddPage();
+ 
+//fijar efecto de sombra en el texto
+        $pdf->setTextShadow(array('enabled' => true, 'depth_w' => 0.2, 'depth_h' => 0.2, 'color' => array(196, 196, 196), 'opacity' => 1, 'blend_mode' => 'Normal'));
+ 
+// Establecemos el contenido para imprimir
+        
+ 
+// Imprimimos el texto con writeHTMLCell()
+        $pdf->writeHTMLCell($w = 0, $h = 0, $x = '', $y = '', $resumen, $border = 0, $ln = 1, $fill = 0, $reseth = true, $align = '', $autopadding = true);
+        $prov=1;
+ 
+// ---------------------------------------------------------
+// Cerrar el documento PDF y preparamos la salida
+// Este método tiene varias opciones, consulte la documentación para más información.
+        $nombre_archivo = utf8_decode("Localidades de ".$prov.".pdf");
+        $pdf->Output($nombre_archivo, 'I');
     }
     
 }

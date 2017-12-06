@@ -32,13 +32,13 @@ class Reclamo_model extends CI_Model
     }
     public function dameUno($id)
     {
-        $return[0] = $this->db->select('recId,recFecha,recFechaModificacion,recNombre,recApePat,recApeMat,recRut,recArea,recDomicilio,recTelefono,recEmail,recEstado,recObservacion,recRespuesta,recApoNombre,recApoApePat,recApoApeMat,recApoVinculo,recApoRut,recApoDomicilio,recApoTelefono,recApoEmail,recApoRespuesta,recHechos,recPeticion,c.comNombre,s.comNombre comApoNombre')
+        $return[0] = $this->db->select('recId,recFecha,recFechaModificacion,recAutorizado,recNombre,recApePat,recApeMat,recRut,recArea,recDomicilio,recTelefono,recEmail,recEstado,recObservacion,recRespuesta,recApoNombre,recApoApePat,recApoApeMat,recApoVinculo,recApoRut,recApoDomicilio,recApoTelefono,recApoEmail,recApoRespuesta,recHechos,recPeticion,c.comNombre,s.comNombre comApoNombre')
                         ->from('reclamos')
                         ->join('comunas c','c.comId=recComuna')
                         ->join('comunas s','s.comId=recApoComuna','left')
                         ->join('respuestas r','r.resReclamo=recId','left')
                         ->join('estados','recEstado=estId','left')
-                        ->where('recEstado <',5)
+                        ->where('recEstado !=',5)
                         ->where('recId',$id)
                         ->get()
                         ->row();
@@ -62,7 +62,7 @@ class Reclamo_model extends CI_Model
         return $this->db->select('*')
                         ->from('reclamos')
                         ->join('estados','recEstado=estId','left')
-                        ->where('recEstado <',5)
+                        ->where('recEstado !=',5)
                         ->get()
                         ->result();
     }
@@ -73,7 +73,7 @@ class Reclamo_model extends CI_Model
         return $this->db->select('*')
                         ->from('reclamos')
                         ->join('estados','recEstado=estId','left')
-                        ->where('recEstado <',5)
+                        ->where('recEstado !=',5)
                         ->where('recArea',$area)
                         ->get()
                         ->result();

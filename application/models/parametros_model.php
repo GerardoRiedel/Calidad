@@ -42,7 +42,7 @@ class Parametros_model extends CI_Model
     public function dameColaborador($usuario)
     {
         $db = $this->load->database('capacitacion', TRUE);
-        $return =  $db->select('c.idcolaborador id,c.nombre,c.apellidoPaterno,c.apellidoMaterno,c.idunidad,u.descripcion')
+        $return =  $db->select('c.idcolaborador id,c.nombre,c.apellidoPaterno,c.apellidoMaterno,c.idunidad,u.descripcion,c.correo')
                         ->from('colaboradores c')
                         ->join('unidades u','u.idunidad=c.idunidad')
                         ->where('c.estado','A')
