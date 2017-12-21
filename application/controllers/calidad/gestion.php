@@ -48,7 +48,22 @@ class gestion extends CI_Controller {
 
 
 
-    
+    public function cargarReenviarFelicitacion($id)
+    {    
+        $data['data']   = $this->sugerencia_model->dameUno($id);
+        $data['unidad']    = $this->parametros_model->dameUnidades();
+        $data['comuna']  = $this->comunas_model->dameTodo();
+        $data['title']           = "Felicitaciones o Sugerencias";
+        $data['menu']       = "gestion";
+        $data['submenu']    = "felicitacion";
+        Layout_Helper::cargaVista($this,'felicitacion',$data,'ingresos');   
+    }
+    public function reenviarFelicitacion()
+    {
+        $id=$this->input->post('sugId');
+        $dest=$this->input->post('emailDestino');
+        $this->envioSugerencia($id,$dest);
+    }
     public function felicitacion()
     {    
         $data['unidad']    = $this->parametros_model->dameUnidades();
@@ -213,7 +228,7 @@ class gestion extends CI_Controller {
         $headers .= "bcc: griedel@cetep.cl,calidad@cetep.cl";
         mail($destinatario,$asunto,$resumen,$headers) ;
     }
-    public function envioSugerencia($id)
+    public function envioSugerencia($id,$dest='')
     {
         $sugerencia = $this->sugerencia_model->dameUno($id);
         
@@ -302,13 +317,14 @@ class gestion extends CI_Controller {
         
         IF(!empty($correoJefe)){
             $correoJefe=$correoJefe->correoDirector.",".$correoJefe->correoJefe;
-            $headers .= "bcc: griedel@cetep.cl,cbarrera@cetep.cl,marcelapaz@cetep.cl,".$correoJefe;
+            $headers .= "bcc: griedel@cetep.cl,cbarrera@cetep.cl,marcelapaz@cetep.cl,".$correoJefe."\r\n";
         }
-        ELSE $headers .= "bcc: griedel@cetep.cl,cbarrera@cetep.cl,marcelapaz@cetep.cl";
+        ELSE $headers .= "bcc: griedel@cetep.cl,cbarrera@cetep.cl,marcelapaz@cetep.cl\r\n";
         
         $asunto = 'Felicitación o sugerencia';
         //IF(!empty($email))$destinatario = $email; ELSE $destinatario = '';        
         $destinatario = 'calidad@cetep.cl';
+        IF(!empty($dest)){$destinatario = $dest;$headers .= "cc: calidad@cetep.cl\r\n";}
     mail($destinatario,$asunto,$resumen,$headers) ;
     $data = array('recId' => '');$this->session->set_userdata($data);	
     //echo $resumen;die;
@@ -473,7 +489,7 @@ class gestion extends CI_Controller {
         
         //ENVIO A PACIENTE
         IF(!empty($email))$destinatario = $email; ELSE $destinatario = '';
-        $asunto = 'Copia de su Reclamo - Este correo se ha generado automaticamente. Por favor no responder';
+        $asunto = 'Copia de su Reclamo - IMPORTANTE: Este correo es informativo y automatizado, favor no responder.';
         mail($destinatario,$asunto,$resumen,$headers) ;
     
         //ENVIO CON LINK PARA JEFE
@@ -1120,7 +1136,7 @@ class gestion extends CI_Controller {
         //$headers .= "cc: griedel@cetep.cl,calidad@cetep.cl,cbarrera@cetep.cl";
         IF(!empty($email))$destinatario = $email; ELSE $destinatario = '';
         //$destinatario = 'gerardo.riedel.c@gmail.com';
-        $asunto = 'Resolución Reclamo';
+        $asunto = 'Resolución Reclamo - IMPORTANTE: Este correo es informativo y automatizado, favor no responder.';
         //echo $resumen;
        // die;
     mail($destinatario,$asunto,$resumen,$headers) ;

@@ -32,6 +32,7 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
                                 <th>Telefono</th>
                                 <th>Email</th>
                                 <th>Descripción</th>
+                                <th>Reenviar</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -46,6 +47,9 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
                                 <td style="font-size:9px"><?php echo $item->sugTelefono; ?></td>
                                 <td style="font-size:9px"><?php echo strtoupper($item->sugEmail); ?></td>
                                 <td style="font-size:9px;width:400px"><?php echo $item->sugHechos; ?></td>
+                                <td align="center">
+                                  <a class="tip-bottom" title="Ver" href="<?php echo base_url("calidad/gestion/cargarReenviarFelicitacion/".$item->sugId )?>"><i class="fa fa-paper-plane" aria-hidden="true"></i></a>
+                                </td>
                             </tr>
                                 <?php endforeach; ?>
                         </tbody>
@@ -417,4 +421,3 @@ return number_format( substr ( $rut, 0 , -1 ) , 0, "", ".") . '-' . substr ( $ru
     }
     
 </script>
-

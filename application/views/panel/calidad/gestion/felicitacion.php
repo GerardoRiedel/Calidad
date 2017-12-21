@@ -31,7 +31,11 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: tr
             -->
         </div>
             <?php $attributes = array('id' => 'form'); 
+            IF(!empty($data->sugId)){
+                echo form_open('calidad/gestion/reenviarFelicitacion',$attributes);
+            }ELSE {
                 echo form_open('calidad/gestion/guardarSugerencia',$attributes);
+            }
             ?>
                             
             <div class='widget-content'>
@@ -48,15 +52,16 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: tr
                         <label>Rut</label> 
                     </div>
                     <div class='col-lg-4'>
-                        <input name="rut"  type="text" placeholder="Digite run" minlength="7" required id="rut"><br><h7 style="font-size:8px">&nbsp;&nbsp;&nbsp;ejemplo 12345678-9</h7>
+                        <input name="rut"  type="text" placeholder="Digite run" minlength="7" required id="rut" value="<?php IF(!empty($data->sugRut)) echo formatearRut($data->sugRut); ?>"><br><h7 style="font-size:8px">&nbsp;&nbsp;&nbsp;ejemplo 12345678-9</h7>
                     </div>
                     <div class="col-lg-12"></div>
                     <div class="col-lg-1"></div>
                      <div class="col-lg-2">
                         <label>Nombres</label>
                     </div>
+                    <?php //echo var_dump($data); ?>
                     <div class='col-lg-4'>
-                        <input name="nombre"  type="text" minlength="3" required>
+                        <input name="nombre"  type="text" minlength="3" required value="<?php IF(!empty($data->sugNombre)) echo $data->sugNombre; ?>">
                     </div>
                     <div class="col-lg-12"></div>
                     <div class="col-lg-1"></div>
@@ -64,13 +69,13 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: tr
                         <label>Apellido Paterno</label>
                     </div>
                     <div class='col-lg-3'>
-                        <input name="apePat"  type="text" minlength="3" required>
+                        <input name="apePat"  type="text" minlength="3" required value="<?php IF(!empty($data->sugApePat)) echo $data->sugApePat; ?>">
                     </div> 
                     <div class="col-lg-2">
                         <label>Apellido Materno</label>
                     </div>
                     <div class='col-lg-4'>
-                        <input name="apeMat"  type="text" minlength="3" required>
+                        <input name="apeMat"  type="text" minlength="3" required value="<?php IF(!empty($data->sugApeMat)) echo $data->sugApeMat; ?>">
                     </div>     
                     <div class="col-lg-12"></div>
                     <div class="col-lg-1"></div>
@@ -78,7 +83,7 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: tr
                         <label>Domicilio</label>
                     </div>
                     <div class='col-lg-3'>
-                        <input name="domicilio"  type="text" minlength="3" required>
+                        <input name="domicilio"  type="text" minlength="3" required  value="<?php IF(!empty($data->sugDomicilio)) echo $data->sugDomicilio; ?>">
                     </div> 
                      <div class="col-lg-2">
                         <label>Comuna</label>
@@ -87,8 +92,7 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: tr
                         <select name="comuna" id="comuna" style="width:250px">
                             <option value="0">Seleccione...</option>
                             <?php foreach($comuna as $com): ?>
-                            
-                                <option value="<?php echo $com->comId;?>"><?php echo $com->comNombre;?></option>
+                                <option value="<?php echo $com->comId;?>" <?php IF(!empty($data->comId)&&$data->comId===$com->comId)echo 'selected';?>><?php echo $com->comNombre;?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
@@ -101,13 +105,13 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: tr
                         <label>Teléfono</label>
                     </div>
                     <div class='col-lg-3'>
-                        <input name="telefono" type="text" minlength="9" pattern="[0-9]{9}" required id="telefono" title="Ingrese un telefono valido de 9 números">
+                        <input name="telefono" type="text" minlength="9" pattern="[0-9]{9}" required id="telefono" title="Ingrese un telefono valido de 9 números"  value="<?php IF(!empty($data->sugTelefono)) echo $data->sugTelefono; ?>">
                     </div>
                     <div class="col-lg-2">
                         <label>Email</label>
                     </div>
                     <div class='col-lg-4'>
-                        <input name="email" type=   "text" minlength="9" id="email" pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$" title="Ingrese un correo valido, ej: mail@ejemplo.com"  >
+                        <input name="email" type=   "text" minlength="9" id="email" pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$" title="Ingrese un correo valido, ej: mail@ejemplo.com"   value="<?php IF(!empty($data->sugEmail)) echo $data->sugEmail; ?>">
                     </div>
                     <div class="col-lg-12"></div>
                     <div class="col-lg-1"></div>
@@ -119,7 +123,7 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: tr
                             <option value="0">Seleccione...</option>
                             <?php foreach($unidad as $uni): ?>
                                 <?php IF($uni->descripcion !== 'UGE'){ ?>
-                                    <option value="<?php echo $uni->id;?>">
+                                    <option value="<?php echo $uni->id;?>"<?php IF(!empty($data->sugUnidad)&&$data->sugUnidad===$uni->id)echo 'selected';?>>
                                         <?php 
                                             echo $uni->descripcion; 
                                             IF($uni->descripcion === 'OTEC')echo ' IMPULSA'; 
@@ -142,9 +146,21 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: tr
                     </div>
                     <div class="col-lg-1"></div>
                     <div class='col-lg-11'>
-                        <textarea name="hechos" style=" width: 86%; height: 300px" placeholder="Describa aquí sus felicitaciones o sugerencias"></textarea>
+                        <textarea name="hechos" style=" width: 86%; height: 300px" placeholder="Describa aquí sus felicitaciones o sugerencias"><?php IF(!empty($data->sugHechos)) echo $data->sugHechos; ?></textarea>
                     </div>
                     <div class='col-lg-12'><br></div>
+                    <?php IF(!empty($data)){ ?>
+                    <div class="col-lg-1"></div>
+                        <div class="col-lg-2">
+                            <label>Email nuevo destinatario</label>
+                        </div>
+                        <div class='col-lg-4'>
+                            <input name="sugId" type="hidden" value="<?php IF(!empty($data->sugId))echo $data->sugId; ?>">
+                        
+                            <input name="emailDestino" type=   "text" minlength="9" required pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$" title="Ingrese un correo valido, ej: mail@ejemplo.com"   >
+                        </div>
+                    <?php } ?>
+                    <div class="col-lg-12" ><hr></div>       
                     <div class="col-lg-12" align="center">
                         <?php echo form_submit('','Enviar','class="btn btn-primary btn-sm btnCetep"');?>
                         <?php echo form_close();?>
@@ -300,3 +316,21 @@ function formatearRut(rut){
 
 </script>
 
+<?php
+function formatearRut( $rut ) {
+     while($rut[0] == "0") {
+            $rut = substr($rut, 1);
+        }
+        $factor = 2;
+        $suma = 0;
+        for($i = strlen($rut) - 1; $i >= 0; $i--) {
+            $suma += $factor * $rut[$i];
+            $factor = $factor % 7 == 0 ? 2 : $factor + 1;
+        }
+        $dv = 11 - $suma % 11;
+        /* Por alguna razón me daba que 11 % 11 = 11. Esto lo resuelve. */
+        $dv = $dv == 11 ? 0 : ($dv == 10 ? "K" : $dv);
+        $rut=  $rut . $dv;
+return number_format( substr ( $rut, 0 , -1 ) , 0, "", ".") . '-' . substr ( $rut, strlen($rut) -1 , 1 );
+}
+?>
