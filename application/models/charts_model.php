@@ -38,6 +38,16 @@ class Charts_model extends CI_Model
                 ->get()
                 ->result();
     }
+     public function pieRECLAMOS()
+    {
+      return  $this->db->select('count(recArea)cant,recArea')
+                ->from('reclamos')
+                ->where('recEstado !=',5)      
+                //->where('plaUnidadDeApoyo !=','Seleccione...')
+                ->group_by('recArea')
+                ->get()
+                ->result();
+    }
     
 
 }

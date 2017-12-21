@@ -86,7 +86,7 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
                                             ELSEIF($uni->descripcion === 'UAC')echo ' -  UNIDAD ATENCIÓN CLÍNICA';
                                             ELSEIF($uni->descripcion === 'UGH')echo ' - UNIDAD GESTION HOSPITALARIO';
                                             ELSEIF($uni->descripcion === 'UPC')echo ' -  UNIDAD PERITAJE CLÍNICO';
-                                            ELSEIF($uni->descripcion === 'USL')echo ' -  SALUD MENTAL LABORAL';
+                                            ELSEIF($uni->descripcion === 'USL')echo ' -  UNIDAD SALUD LABORAL';
                                 ?>
                             </option>
                             <?php endforeach; ?>
@@ -299,7 +299,7 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
                     </div>
                     <div class="col-lg-1"></div>
                     <div class='col-lg-11'>
-                        <textarea name="hechos" style=" width: 86%; height: 200px" placeholder="Indicación de los hechos que fundamente su reclamo y de la infracción a los derechos que contempla la ley" required><?php IF(!empty($reclamo))echo strtoupper($reclamo->recHechos); ?></textarea>
+                        <textarea name="hechos" style=" width: 86%; height: 200px" placeholder="Indicación de los hechos que fundamente su reclamo y de la infracción a los derechos que contempla la ley" required><?php IF(!empty($reclamo))echo $reclamo->recHechos; ?></textarea>
                     </div>
                     <div class="col-lg-1"></div>
                     <div class="col-lg-11">
@@ -307,7 +307,7 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
                     </div>
                     <div class="col-lg-1"></div>
                     <div class='col-lg-11'>
-                        <textarea name="peticion" style=" width: 86%; height: 100px" placeholder="Petición concreta" required=""><?php IF(!empty($reclamo))echo strtoupper($reclamo->recPeticion); ?></textarea>
+                        <textarea name="peticion" style=" width: 86%; height: 100px" placeholder="Petición concreta" required=""><?php IF(!empty($reclamo))echo $reclamo->recPeticion; ?></textarea>
                     </div>
                     <div class="col-lg-12"><br></div>
                     <div class="col-lg-1"></div>
@@ -359,7 +359,7 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
                     </div>
                     <div class="col-lg-1"></div>
                     <div class='col-lg-11'>
-                        <textarea name="observacion" style=" width: 86%; height: 100px" placeholder='Observación o enviar recordatorio a jefe de unidad como "PENDIENTE"' required="true"><?php IF(!empty($reclamo))echo strtoupper($reclamo->recObservacion); ?></textarea>
+                        <textarea name="observacion" style=" width: 86%; height: 100px" placeholder='Observación o enviar recordatorio a jefe de unidad como "PENDIENTE"' required="true"><?php IF(!empty($reclamo))echo $reclamo->recObservacion; ?></textarea>
                     </div>
                     <?php } ?>
                      <div class='col-lg-12'><hr></div>   

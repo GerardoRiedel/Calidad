@@ -131,6 +131,8 @@ class gestion extends CI_Controller {
         ELSE {
                 $this->reclamo_model->recFecha = date('Y-m-d H:i:s');
         }
+        $hechos = $this->input->post('hechos');        
+        $peticion = $this->input->post('peticion');
         $this->reclamo_model->recRut               = $rut;
         $this->reclamo_model->recNombre      = $this->input->post('nombre');
         $this->reclamo_model->recApePat        = $this->input->post('apePat');
@@ -141,8 +143,8 @@ class gestion extends CI_Controller {
         $this->reclamo_model->recTelefono     = $this->input->post('telefono');
         $this->reclamo_model->recEmail           = $this->input->post('email');
         $this->reclamo_model->recRespuesta = $this->input->post('respuesta');
-        $this->reclamo_model->recHechos       = $this->input->post('hechos');
-        $this->reclamo_model->recPeticion       = $this->input->post('peticion');
+        $this->reclamo_model->recHechos       = $hechos;
+        $this->reclamo_model->recPeticion       = $peticion;
         $this->reclamo_model->recUsuario       = $this->session->userdata('id_usuario');
         
         $apoRut = $this->input->post('apoRut');
@@ -234,7 +236,7 @@ class gestion extends CI_Controller {
             ELSEIF($uni === '4')$unidadDescripcion= 'UNIDAD ATENCIÓN CLÍNICA';
             ELSEIF($uni === '2')$unidadDescripcion= 'UNIDAD GESTION HOSPITALARIO';
             ELSEIF($uni === '3')$unidadDescripcion= 'UNIDAD PERITAJE CLÍNICO';
-            ELSEIF($uni === '30')$unidadDescripcion= 'SALUD MENTAL LABORAL';
+            ELSEIF($uni === '30')$unidadDescripcion= 'UNIDAD SALUD LABORAL';
             ELSEIF($uni === '13')$unidadDescripcion= 'MIRANDES CLINICA';
             ELSE $unidadDescripcion = $uni;
         $correoJefe = $this->sugerencia_model->dameCorreoUnidad($uni);
@@ -319,16 +321,6 @@ class gestion extends CI_Controller {
         
         
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
         $envio = $this->reclamo_model->dameUno($id);
         $reclamo = $envio[0];
         $unidad   = $envio[1][0];
@@ -365,10 +357,9 @@ class gestion extends CI_Controller {
         $resumen="
             Estimado $nombre,
                 <br><br>
-                Junto con saludarlo, le comunicamos que hemos recibido su reclamo:
+                Junto con saludarlo, le comunicamos que hemos recibido su reclamo, el cual será respondido dentro de los plazos legales
                 <br><br>
         <table border='0'>
-        
             <tr>
                 <td rowspan='2' style='width:650px'>";
                     
@@ -482,7 +473,7 @@ class gestion extends CI_Controller {
         
         //ENVIO A PACIENTE
         IF(!empty($email))$destinatario = $email; ELSE $destinatario = '';
-        $asunto = 'Copia de su Reclamo';
+        $asunto = 'Copia de su Reclamo - Este correo se ha generado automaticamente. Por favor no responder';
         mail($destinatario,$asunto,$resumen,$headers) ;
     
         //ENVIO CON LINK PARA JEFE
@@ -703,7 +694,7 @@ class gestion extends CI_Controller {
         
         
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// ENVIAR
- //     $enviar='on';
+ //    $enviar='on';
         IF(($enviar === 'off' && !empty($recId) && empty($colaborador) && $autorizado==='si' ) || ($autorizado==='si' && $enviar === 'off' && !empty($recId) && $colaborador->id !== '57' && $colaborador->id !== '64' && $colaborador->id !== '38' )){
                     $this->reclamo_model->recId = $recId;
                     $this->reclamo_model->recEstado = 4;
@@ -771,13 +762,17 @@ class gestion extends CI_Controller {
                     }
                     ELSE $this->listar_reclamos();
             
-        }ELSEIF($enviar === 'on' && !empty($recId) ){
+        }ELSEIF($enviar === 'on' && !empty($recId) ){//<a  onclick="window.history.go(-1)" data-dismiss="modal" class="btn btn-danger">Cerrar</a>
+            
+      //     $this->resumenRespuesta($recId);
+          //  echo '<script>function arriba(){$("body,html").animate({scrollTop : 0}, 500);}</script>';
+            //die;
+       //     echo '<script>var envia = confirm("¿Esta seguro de enviar esta respuesta?");if(envia !=true){window.history.go(-2);return false;}</script>';
             
             //die('a respuesta'); 
             $this->reclamo_model->recId = $recId;
             $this->reclamo_model->recEstado = 3;
             $this->reclamo_model->recFechaModificacion = date('Y-m-d H:i:s');
-            
             $this->reclamo_model->guardar();
             
             $this->enviarRespuesta($recId);
@@ -909,9 +904,14 @@ class gestion extends CI_Controller {
                 <td colspan='5' style='border:none' align='justify' >En respuesta a su reclamo N° <b>".$reclamo->recId."</b> con fecha ".$fechaReclamo.", donde menciona: <br><br> <pre style='font-family: arial;font-size:14px'>".$respuestaHecho."</pre><br></td>
             </tr>
             <tr>
-                <td colspan='5' style='border:none'  align='justify' ><i><blockquote><pre>".$respuestaRespuesta."</pre></blockquote></i></td>
+                <td colspan='5' style='border:none' align='justify' ><br>Lamentamos los inconvenientes que estos hechos pudieran haberle ocasionado y sentimos muy sinceramente no haber respondido a sus expectativas, su reclamo ha sido registrado y revisado.<br><br></td>
             </tr>
-            
+            <tr>
+                <td colspan='5' style='border:none' align='justify' >Podemos informar que: <br><br><i><blockquote><pre>".$respuestaRespuesta."</pre></blockquote></i></td>
+            </tr>
+             <tr>
+                    <td colspan='5' style='border:none' align='justify' ><br>Agradecemos que nos haya hecho llegar sus observaciones, esto nos permite poder seguir mejorando nuestra calidad y servicio a clientes</td>
+                </tr>
             <tr>
                 <td colspan='5' style='border:none;font-size:13px' align='justify' ><br><b>De conformidad a lo señalado en el reglamento del MINSAL sobre procedimientos de reclamo de la ley N°20.584, le informamos su facultad para recurrir ante la Superintendencia de Salud para presentar su reclamo.</b></td>
             </tr>
@@ -950,7 +950,7 @@ class gestion extends CI_Controller {
         
         
         
-     //   die($resumen);
+     // die($resumen);
         
         
         
@@ -1122,11 +1122,177 @@ class gestion extends CI_Controller {
         //$destinatario = 'gerardo.riedel.c@gmail.com';
         $asunto = 'Resolución Reclamo';
         //echo $resumen;
-        //die;
+       // die;
     mail($destinatario,$asunto,$resumen,$headers) ;
     //$data = array('recId' => $id);$this->session->set_userdata($data);	
     //echo $resumen;die;
     $this->load->view('panel/modals/guardar_exitoso');
+    }
+    
+    
+    public function resumenRespuesta($id)
+    {
+        $respuesta = $this->reclamo_model->dameRespuesta($id);
+        $envio = $this->reclamo_model->dameUno($id);
+        
+        $reclamo = $envio[0];
+        $unidad   = $envio[1][0];
+        IF(!empty($unidad) || !empty($reclamo)){ echo '<script>alert("Error en cuentas de director o jefe de Unidad");window.history.go(-2);}</script>';};
+           
+        //die(var_dump($reclamo));
+        $mail = 'calidad@cetep.cl';//DESDE
+        $header = 'From: ' . $mail . " \r\n";
+        $header .= "X-Mailer: PHP/" . phpversion() . " \r\n";
+        $header .= "Mime-Version: 1.0 \r\n";
+        $header .= "Content-Type: text/html";
+        
+        $fecha = new DateTime($respuesta->resFecha);
+        //$fecha = $fecha->format('d-m-Y');
+        $mes = $fecha->format('m'); if($mes==='10')$mes='Octubre';elseif($mes==='11')$mes='Noviembre';elseif($mes==='12')$mes='Diciembre';elseif($mes==='01')$mes='Enero';elseif($mes==='02')$mes='Febrero';elseif($mes==='03')$mes='Marzo';elseif($mes==='04')$mes='Abril';elseif($mes==='05')$mes='Mayo';elseif($mes==='06')$mes='Junio';elseif($mes==='07')$mes='Julio';elseif($mes==='08')$mes='Agosto';elseif($mes==='09')$mes='Septiembre';
+        $dia   = $fecha->format('d'); 
+        $ano= $fecha->format('Y'); 
+        $fecha = $dia.' de '.$mes.' de '.$ano;
+                        
+                        
+        $fechaReclamo = new DateTime($reclamo->recFecha);
+        //$fechaReclamo = $fechaReclamo->format('d-m-Y');
+        $mes = $fechaReclamo->format('m'); if($mes==='10')$mes='Octubre';elseif($mes==='11')$mes='Noviembre';elseif($mes==='12')$mes='Diciembre';elseif($mes==='01')$mes='Enero';elseif($mes==='02')$mes='Febrero';elseif($mes==='03')$mes='Marzo';elseif($mes==='04')$mes='Abril';elseif($mes==='05')$mes='Mayo';elseif($mes==='06')$mes='Junio';elseif($mes==='07')$mes='Julio';elseif($mes==='08')$mes='Agosto';elseif($mes==='09')$mes='Septiembre';
+        $dia   = $fechaReclamo->format('d'); 
+        $ano= $fechaReclamo->format('Y'); 
+        $fechaReclamo = $dia.' de '.$mes.' de '.$ano;
+        
+        
+        $nombre = $reclamo->recNombre." ".$reclamo->recApePat." ".$reclamo->recApeMat;
+        $area = strtoupper($unidad->descripcion);
+        $domicilio = $reclamo->recDomicilio;
+        $comuna = strtoupper($reclamo->comNombre);
+        //$telefono = $reclamo->recTelefono;
+        $email = strtoupper($reclamo->recEmail);
+        
+        $respuestaHecho = $respuesta->resHecho;
+        $respuestaHechoLargo = strlen($respuestaHecho);
+        IF($respuestaHechoLargo<600)$respuestaHechoLargo=125;
+        ELSEIF($respuestaHechoLargo<900)$respuestaHechoLargo=250;
+        ELSE $respuestaHechoLargo=350;
+        
+        $respuestaRespuesta = $respuesta->resRespuesta;
+        $respuestaRespuestaLargo = strlen($respuestaRespuesta);
+         IF($respuestaRespuestaLargo<600)$respuestaRespuestaLargo=125;
+        ELSEIF($respuestaRespuestaLargo<900)$respuestaRespuestaLargo=250;
+        ELSE $respuestaRespuestaLargo=350;
+        
+        $apoNombre = strtoupper($reclamo->recApoNombre)." ".strtoupper($reclamo->recApoApePat)." ".strtoupper($reclamo->recApoApeMat);
+        $apoDomicilio = strtoupper($reclamo->recApoDomicilio);
+        $apoComuna = strtoupper($reclamo->comApoNombre);
+        //$apoTelefono = $reclamo->recApoTelefono;
+        $apoEmail = strtoupper($reclamo->recApoEmail);
+        //$vinculo = $reclamo->recApoVinculo; IF($vinculo === '1')$vinculo = 'Rep. Legal'; ELSEIF($vinculo === '2') $vinculo = 'Apoderado'; ELSE $vinculo='';
+        //$apoRespuesta = $reclamo->recApoRespuesta; IF($apoRespuesta === '1')$apoRespuesta = 'SI'; ELSEIF($apoRespuesta === '2') $apoRespuesta = 'NO'; ELSE $apoRespuesta= '';
+        
+        $director = $this->parametros_model->dameDirectorUnidad($unidad->id);
+        
+        $directorNombre = $director->nombre.' '.$director->apellidoPaterno.' '.$director->apellidoMaterno;
+        $directorNombre = strtoupper($directorNombre);
+        $directorFirma = $director->director;
+        
+        
+        $correoJefe = $this->sugerencia_model->dameCorreoUnidad($unidad->id);
+      
+        
+        $resumen="
+        <table border='0'>
+            <tr>
+                <td rowspan='2' style='width:650px'>";
+                    
+                        IF($area === 'MIRANDES HD y RH' || $area === 'MIRANDES CLINICA ' || $area === 'MIRANDES HD CONCEPCION' || $area === 'MIRANDES HD RANCAGUA' ){
+
+                                    $resumen .= "<img style='width: 20%; ' src='".base_url()."../assets/img/mirAndes.png' >";
+                        }ELSE {
+                                    $resumen .= "<img style='width: 20%; ' src='".base_url()."../assets/img/logo_vertical_cetep.png' >";
+                        }
+         $resumen .="
+                </td>
+                <td style='width:50px'></td>
+                <td ></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td style='width:250px'>Santiago, ".$fecha."</td>
+            </tr>
+        </table>
+        
+        <table style='width:800px; border:none'>
+            <tr>
+                <td colspan='2' style='border:none'>De nuestra consideración:</td>
+                <td style='border:none'></td>
+                <td colspan='2' style='border:none'></td>
+            </tr>
+            <tr>
+                <td style='width:100px;border:none'>Estimado(a)</td>
+                <td style='width:300px;border:none'>".$nombre."</td>
+                <td style='border:none'></td>
+                <td style='width:100px;border:none'></td>
+                <td style='width:300px;border:none'></td>
+            </tr>
+            
+            
+            <tr>
+                <td style='border:none'>Domicilio:</td>
+                <td style='border:none'>".$domicilio.", ".$comuna."</td>
+                <td style='border:none'></td>
+                <td style='border:none'></td>
+                <td style='border:none'></td>
+            </tr>
+           
+            <tr>
+                <td style='border:none' colspan='5'><br></td>
+            </tr>
+            <tr>
+                <td colspan='5' style='border:none' align='justify' >En respuesta a su reclamo N° <b>".$reclamo->recId."</b> con fecha ".$fechaReclamo.", donde menciona: <br><br> <pre style='font-family: arial;font-size:14px'>".$respuestaHecho."</pre><br></td>
+            </tr>
+            <tr>
+                <td colspan='5' style='border:none' align='justify' ><br>Lamentamos los inconvenientes que estos hechos pudieran haberle ocasionado y sentimos muy sinceramente no haber respondido a sus expectativas, su reclamo ha sido registrado y revisado.<br><br></td>
+            </tr>
+            <tr>
+                <td colspan='5' style='border:none' align='justify' >Podemos informar que: <br><br><i><blockquote><pre>".$respuestaRespuesta."</pre></blockquote></i></td>
+            </tr>
+             <tr>
+                    <td colspan='5' style='border:none' align='justify' ><br>Agradecemos que nos haya hecho llegar sus observaciones, esto nos permite poder seguir mejorando nuestra calidad y servicio a clientes</td>
+                </tr>
+            <tr>
+                <td colspan='5' style='border:none;font-size:13px' align='justify' ><br><b>De conformidad a lo señalado en el reglamento del MINSAL sobre procedimientos de reclamo de la ley N°20.584, le informamos su facultad para recurrir ante la Superintendencia de Salud para presentar su reclamo.</b></td>
+            </tr>
+            
+            <tr>
+                <td colspan='2' style='border:none;' align='center'>
+                        <img style='width: 80px; ' src='".base_url()."../assets/img/firmas/".$directorFirma.".jpg' >
+                 </td>
+                 <td></td>
+                 <td colspan='2' style='border:none;'  align='center'>
+                        <img style='width: 80px; ' src='".base_url()."../assets/img/calidad.png' >
+                 </td>
+            </tr>
+            <tr>
+                <td colspan='2' style='border:none;'  align='center'>
+                        __________________________<br>
+                        ".$directorNombre."<br>Director Médico<br>".$area."
+                 </td>
+                 <td></td>
+                 <td colspan='2' style='border:none; vertical-align:top'  align='center'>
+                        __________________________<br>
+                        Revisión Departamento de Calidad
+                 </td>
+                
+            </tr>
+        </table>
+        <br>
+        ";
+
+        echo $resumen;
+        echo '<script>var envia = confirm("¿Esta seguro de enviar esta respuesta?");if(envia !=true){window.history.go(-2);}</script>';
+        sleep(10);
+    //$this->load->view('panel/modals/guardar_exitoso');
     }
     
     

@@ -78,17 +78,28 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
                     </div>
                     
                     <div class="col-lg-12"><br></div>
-                    
-                    
+                    <div class="col-lg-1"></div>
+                    <div class="col-lg-11">
+                        Lamentamos los inconvenientes que estos hechos pudieran haberle ocasionado y sentimos muy sinceramente no haber respondido a sus expectativas, su reclamo ha sido registrado y revisado.
+                        <br><br>
+                        Podemos informar que: 
+                    </div>
                     <div class='col-lg-1'></div>
                     <div class="col-lg-11">
                         <label class="titulo">Respuesta</label> 
                     </div>
                     <div class='col-lg-1'></div>
+                    
                     <div class='col-lg-10'>
                         <textarea name="respuesta" style=" width: 100%; height: 300px" placeholder="Ingrese aquí su respuesta" required="true"><?php IF(!empty($respuesta))echo $respuesta->resRespuesta; ?></textarea>
                     </div>
-                     <div class='col-lg-12'><br></div>   
+                    <div class='col-lg-12'></div>
+                    <div class='col-lg-1'></div>
+                     <div class='col-lg-10'><br>
+                         Agradecemos que nos haya hecho llegar sus observaciones, esto nos permite poder seguir mejorando la calidad y servicio a nuestros clientes
+                
+                     </div>   
+                    <div class='col-lg-12'><br></div>
                      <div class='col-lg-1'></div>
                      
                      <div class="col-lg-10" style=" text-align: justify">

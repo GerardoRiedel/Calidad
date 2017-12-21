@@ -101,9 +101,9 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
                                 </td>
                                 <td style="font-size: 8px"><?php if($item->plaMotivo === '1') $motivo = 'Sugerencia'; elseif($item->plaMotivo === '2') $motivo = 'Reclamo'; elseif($item->plaMotivo === '3') $motivo = 'PSNC'; elseif($item->plaMotivo === '4') $motivo = 'Felicitación';echo $motivo?></td>
                                 <td style="font-size: 8px"><?php echo strtoupper($item->plaNombre).' '.strtoupper($item->plaApellido); ?></td>
-                                <td style="font-size: 8px;min-width: 200px"><?php echo $item->plaDescripcion; ?></td>
-                                <td style="font-size: 8px;min-width: 200px"><?php echo $item->plaAccion; ?></td>
-                                <td style="font-size: 8px;min-width: 130px"><?php echo $item->plaSeguimiento; ?></td>
+                                <td style="font-size: 8px;width: 200px"><?php echo substr($item->plaDescripcion,0,200).'...'; ?></td>
+                                <td style="font-size: 8px;width: 200px"><?php echo substr($item->plaAccion,0,200).'...'; ?></td>
+                                <td style="font-size: 8px;width: 130px"><?php IF($item->plaSeguimiento!='0')echo $item->plaSeguimiento; ?></td>
                                 <td style="font-size: 8px;" align="center"><?php IF(!empty($item->plaProveedor)    && $item->plaProveedor==='1')   echo 'SI' ; ?></td>
                                 <td style="font-size: 8px;" align="center"><?php IF(!empty($item->plaCliente)          && $item->plaCliente==='1')         echo 'SI' ; ?></td>
                                 <td style="font-size: 8px;" align="center"><?php IF(!empty($item->plaProfesional)  && $item->plaProfesional==='1') echo 'SI' ; ?></td>

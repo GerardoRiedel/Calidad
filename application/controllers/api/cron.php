@@ -40,7 +40,7 @@ class Cron extends CI_Controller
                         . 'Para responderlo favor ingresar a la plataforma a traves de su <b>intracetep</b>-><b>unidad de calidad</b> <i>responder reclamo</i><br>'
                          .'<br><br>'
                         .'Atentamente,<br><br>';
-                $resumen .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img style='width: 100px; ' src='".base_url()."../assets/img/calidad.jpg' >";
+                $resumen .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img style='width: 100px; ' src='".base_url()."../assets/img/calidad.png' >";
                         // . 'LINK: <a href="http://www.cetep.cl/calidad'.$reclamo->recId.'"><b>Responder</b></a>';
                 $headers = "MIME-Version: 1.0\r\n"; 
                 $headers .= "Content-type: text/html; charset=utf-8\r\n"; 
@@ -67,7 +67,7 @@ class Cron extends CI_Controller
                         .'<br><br>'
                         .'Atentamente,<br><br>';
                 //$resumen .= "<img style='width: 20%; ' src='".base_url()."../assets/img/logo_vertical_cetep.png' >";
-                $resumen .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img style='width: 100px; ' src='".base_url()."../assets/img/calidad.jpg' >";
+                $resumen .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img style='width: 100px; ' src='".base_url()."../assets/img/calidad.png' >";
                        // . 'LINK: <a href="http://www.cetep.cl/calidad'.$reclamo->recId.'"><b>Responder</b></a>';
                 $headers = "MIME-Version: 1.0\r\n"; 
                 $headers .= "Content-type: text/html; charset=utf-8\r\n"; 
@@ -78,6 +78,33 @@ class Cron extends CI_Controller
                 //echo $resumen;
                 mail($destinatario,$asunto,$resumen,$headers) ;
     
+             }
+             ELSE {
+                $resumen = '';
+                $recId=$res->recId;
+                $envio = $this->reclamo_model->dameUno($recId);
+                $reclamo = $envio[0];
+                $unidad   = $envio[1][0];
+                $jefe=$unidad->correoDirector.",".$unidad->correoJefe;
+                $asunto = 'Recordatorio Vencimiento de Reclamo';
+                $resumen = 'Estimado Dpto Calidad,<br><br>'
+                        . 'Con respecto al reclamo N°'.$reclamo->recId.', se le recuerda que <b>no</b> se ha realizado la finalización, el cual lleva '.$dias.' habiles sin gestion.<br>'
+                     //   . '<b><span style="color:red"><i>'.$reclamo->recObservacion.'</i></span></b>.<br><br>'
+                        . 'Para responderlo favor ingresar a la plataforma a traves de su <b>intracetep</b>-><b>unidad de calidad</b><br>'
+                        .'<br><br>'
+                        .'Atentamente,<br><br>';
+                //$resumen .= "<img style='width: 20%; ' src='".base_url()."../assets/img/logo_vertical_cetep.png' >";
+                $resumen .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img style='width: 100px; ' src='".base_url()."../assets/img/calidad.png' >";
+                       // . 'LINK: <a href="http://www.cetep.cl/calidad'.$reclamo->recId.'"><b>Responder</b></a>';
+                $headers = "MIME-Version: 1.0\r\n"; 
+                $headers .= "Content-type: text/html; charset=utf-8\r\n"; 
+                $headers .= "From: Calidad <calidad@cetep.cl>\r\n"; //dirección del remitente 
+                //$headers .= "cc: griedel@cetep.cl,".$jefe;
+                $destinatario = 'griedel@cetep.cl';
+                //$resumen ='';
+                //echo ('10');
+                //echo $resumen;
+                mail($destinatario,$asunto,$resumen,$headers) ;
              }
              
         }

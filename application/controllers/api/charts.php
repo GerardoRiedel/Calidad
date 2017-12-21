@@ -32,6 +32,12 @@ class Charts extends CI_Controller
         //die(var_dump($res));
         echo json_encode($res);
     }
+    public function pieRECLAMOS()
+    {
+        $res = $this->charts_model->pieRECLAMOS();
+        //die(var_dump($res));
+        echo json_encode($res);
+    }
     
     
     

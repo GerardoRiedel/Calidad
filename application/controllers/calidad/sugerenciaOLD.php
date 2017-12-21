@@ -131,7 +131,7 @@ class sugerencia extends CI_Controller {
             ELSEIF($uni === '4')$unidadDescripcion= 'UNIDAD ATENCIÓN CLÍNICA';
             ELSEIF($uni === '2')$unidadDescripcion= 'UNIDAD GESTION HOSPITALARIO';
             ELSEIF($uni === '3')$unidadDescripcion= 'UNIDAD PERITAJE CLÍNICO';
-            ELSEIF($uni === '30')$unidadDescripcion= 'SALUD MENTAL LABORAL';
+            ELSEIF($uni === '30')$unidadDescripcion= 'UNIDAD SALUD LABORAL';
             ELSE $unidadDescripcion = $uni;
         $correoJefe = $this->sugerencia_model->dameCorreoUnidad($uni);
         $email = strtoupper($sugerencia->sugEmail);

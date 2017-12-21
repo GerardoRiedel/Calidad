@@ -20,7 +20,12 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
         </div>
             <div class="col-xs-12"></div>
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 bhoechie-tab-container" style="border-color: #000000;"  >
+                <div class="col-lg-12">
                 <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                </div>
+                <div class="col-lg-6">
+                    <div id="pie1" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+                </div>
                 <div class="col-lg-12"><hr></div>
                 
                 <div  class="col-lg-12" style="overflow: none;">
@@ -49,7 +54,7 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
                                         ELSEIF($area === '4')$area= 'UNIDAD ATENCIÓN CLÍNICA';
                                         ELSEIF($area === '2')$area= 'UNIDAD GESTION HOSPITALARIO';
                                         ELSEIF($area === '3')$area= 'UNIDAD PERITAJE CLÍNICO';
-                                        ELSEIF($area === '30')$area= 'SALUD MENTAL LABORAL';
+                                        ELSEIF($area === '30')$area= 'UNIDAD SALUD LABORAL';
                                         ELSEIF($area === '13')$area= 'MIRANDES CLÍNICA';
                                         
                                     IF($item->recEstado === '1')$color = 'green'; 
@@ -91,6 +96,7 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
                                 <?php endforeach; ?>
                         </tbody>
                     </table>
+                    
                 </div>
                 <div class="col-lg-2">
                     <!--
@@ -519,6 +525,132 @@ return number_format( substr ( $rut, 0 , -1 ) , 0, "", ".") . '-' . substr ( $ru
                         series: [{
                             name: 'Universo total: '+cantT+'  reclamos ',
                             data: cant
+                        }]
+                    });
+
+            }
+        });
+</script>
+
+
+
+<script>
+    
+    $.ajax({
+            type: "GET",
+            url: "<?php echo base_url(); ?>" + "api/charts/pieRECLAMOS/",
+            dataType: 'json',
+            
+            success: function(datos){
+                var keyVar;
+                //APOYO
+                var dti = 0;
+                var comunicaciones = 0;
+                var operaciones = 0;
+                var calidad = 0;
+                var uaf = 0;
+                var contabilidad = 0;
+                var comercial = 0;
+                
+                //PRODUCCION
+                 var otec = 0;
+                 var mirandes_clinica = 0;
+                 var upc = 0;
+                 var usl = 0;
+                 var uac = 0;
+                 var mirandes_hd = 0;
+                 var mirandes_conce = 0;
+                 var mirandes_rancagua = 0;
+                
+                 var cantT = 0;
+               
+                
+                    for(keyVar in datos) {
+                        //APOYO
+                        if(datos[keyVar].recArea === 'DTI'){dti = parseInt(datos[keyVar].cant);}
+                        if(datos[keyVar].recArea === 'COMUNICACIONES'){comunicaciones = parseInt(datos[keyVar].cant);}
+                        if(datos[keyVar].recArea === 'CONTABILIDAD'){contabilidad = parseInt(datos[keyVar].cant);}
+                        if(datos[keyVar].recArea === 'OPERACIONES'){operaciones = parseInt(datos[keyVar].cant);}
+                        if(datos[keyVar].recArea === 'CALIDAD'){calidad = parseInt(datos[keyVar].cant);}
+                        if(datos[keyVar].recArea === 'UAF-GESTION DE RRHH'){uaf = parseInt(datos[keyVar].cant);}
+                        if(datos[keyVar].recArea === 'COMERCIAL'){comercial = parseInt(datos[keyVar].cant);}
+                        
+                        //PRODUCCIÓN
+                        if(datos[keyVar].recArea === '10'){otec = parseInt(datos[keyVar].cant);}
+                        if(datos[keyVar].recArea === '13'){mirandes_clinica = parseInt(datos[keyVar].cant);}
+                        if(datos[keyVar].recArea === '3'){upc = parseInt(datos[keyVar].cant);}
+                        if(datos[keyVar].recArea === '30'){usl = parseInt(datos[keyVar].cant);}
+                        if(datos[keyVar].recArea === '4'){uac = parseInt(datos[keyVar].cant);}
+                        if(datos[keyVar].recArea === '11'){mirandes_hd = parseInt(datos[keyVar].cant);}
+                        if(datos[keyVar].recArea === '20'){mirandes_conce = parseInt(datos[keyVar].cant);}
+                        if(datos[keyVar].recArea === '36'){mirandes_rancagua = parseInt(datos[keyVar].cant);}
+                        
+                        
+                    }
+                    //alert(dti);alert(comunicaciones);alert(contabilidad);
+                    //console.log(proveedor);
+                    //console.log(proveedor);
+                   cantT = dti+comunicaciones+contabilidad+operaciones+calidad+uaf+comercial+otec+mirandes_clinica+upc+usl+uac+mirandes_hd+mirandes_conce+mirandes_rancagua;
+                   //console.log(cantT);
+                    
+                    
+                    Highcharts.chart('pie1', {
+                        chart: {
+                            plotBackgroundColor: null,
+                            plotBorderWidth: null,
+                            plotShadow: null,
+                            type: 'pie'
+                        },
+                        title: {
+                            text: 'Reclamos Por Unidad'
+                        },
+                        subtitle: {
+                            text: 'Universo: '+cantT+' registros',
+                        },
+                        tooltip: {
+                            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                        },
+                        plotOptions: {
+                            pie: {
+                                allowPointSelect: true,
+                                cursor: 'pointer',
+                                dataLabels: {
+                                    enabled: true,
+                                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                                    style: {
+                                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || '#a15ebe'
+                                    }
+                                }
+                            }
+                        },
+                        series: [{
+                            name: 'Porcentaje',
+                            colorByPoint: true,
+                            data: [{
+                                    name: 'Mirandes Clínica',
+                                    y: mirandes_clinica
+                                },{
+                                    name: 'Mirandes HD',
+                                    y: mirandes_hd
+                                },{
+                                    name: 'Mirandes Concepción',
+                                    y: mirandes_conce
+                                },{
+                                    name: 'Mirandes Rancagua',
+                                    y: mirandes_rancagua
+                                },{
+                                    name: 'Otec',
+                                    y: otec
+                                },{
+                                    name: 'Centro Médico',
+                                    y: uac
+                                },{
+                                    name: 'Peritajes',
+                                    y: upc
+                                },{
+                                    name: 'Salud Laboral',
+                                    y: usl
+                                }]
                         }]
                     });
 

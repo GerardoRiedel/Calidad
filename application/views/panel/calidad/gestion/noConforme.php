@@ -1,4 +1,5 @@
-
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
 <style>
     .titulo{
         color: #a15ebe;
@@ -164,6 +165,26 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
                 
                 <!-- INICIO TABLA-->
                 <div  class="col-lg-12" style="overflow: auto;">
+                    
+<?php IF(!empty($jefeUnidad)){ ?>
+                                <div class='col-lg-12'><hr></div>
+
+            <div class="col-lg-12"> 
+                                    <!-- 
+               GRAFICOS
+                                    -->
+                <div class="col-lg-6">
+                <div id="pie2" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+                </div>
+                <div class="col-lg-6">
+                <div id="pie1" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+                </div>
+                <!--
+                <div class="col-lg-12">  
+                <div id="container2" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                </div>-->
+            </div>
+<?php } ?>
                     <div class='col-lg-12'><hr></div>
                   <i class="fa fa-table" id="btnExport" style="cursor: pointer; color:#1d7044;font-size:25px;margin-top:10px;margin-left:20px" title="Exportar Tabla a Excel"></i>  
                   
@@ -198,9 +219,9 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
                                 <td style="font-size: 8px"><?php IF(!empty($item->plaFechaHecho)){$date = new DateTime($item->plaFechaHecho);echo $date->format('d-m-y');}//echo $item->id; ?></td>
                                 <td style="font-size: 8px"><?php if($item->plaMotivo === '1') $motivo = 'Sugerencia'; elseif($item->plaMotivo === '2') $motivo = 'Reclamo'; elseif($item->plaMotivo === '3') $motivo = 'PSNC'; elseif($item->plaMotivo === '4') $motivo = 'Felicitación'; echo $motivo?></td>
                                 <td style="font-size: 8px"><?php echo strtoupper($item->plaNombre).' '.strtoupper($item->plaApellido); ?></td>
-                                <td style="font-size: 8px;min-width: 200px"><?php echo $item->plaDescripcion; ?></td>
-                                <td style="font-size: 8px;min-width: 200px"><?php echo $item->plaAccion; ?></td>
-                                <td style="font-size: 8px;min-width: 130px"><?php echo $item->plaSeguimiento; ?></td>
+                                <td style="font-size: 8px;width: 200px"><?php echo substr($item->plaDescripcion,0,200).'...'; ?></td>
+                                <td style="font-size: 8px;width: 200px"><?php echo substr($item->plaAccion,0,200).'...'; ?></td>
+                                <td style="font-size: 8px;width: 100px"><?php IF($item->plaSeguimiento!='0')echo $item->plaSeguimiento; ?></td>
                                 <td style="font-size: 8px;" align="center"><?php IF(!empty($item->plaProveedor)    && $item->plaProveedor==='1')   echo 'SI' ; ?></td>
                                 <td style="font-size: 8px;" align="center"><?php IF(!empty($item->plaCliente)          && $item->plaCliente==='1')         echo 'SI' ; ?></td>
                                 <td style="font-size: 8px;" align="center"><?php IF(!empty($item->plaProfesional)  && $item->plaProfesional==='1') echo 'SI' ; ?></td>
@@ -485,3 +506,210 @@ function formatearRut(rut){
 
 
 </script>
+
+
+
+<script>
+    //PIE PISO
+    $.ajax({
+            type: "GET",
+            url: "<?php echo base_url(); ?>" + "api/charts/piePSNC/",
+            dataType: 'json',
+            
+            success: function(datos){
+                var keyVar;
+                var proveedor = 0;
+                var cliente = 0;
+                var profesional = 0;
+                var unidad = 0;
+                var apoyo = 0;
+                var cantT = 0;
+                //var otro = 0;
+                var paciente = 0;
+                
+                    for(keyVar in datos) {
+                        proveedor = parseInt(datos[keyVar].proveedor);
+                        cliente = parseInt(datos[keyVar].cliente);
+                        profesional = parseInt(datos[keyVar].profesional);
+                        unidad = parseInt(datos[keyVar].unidad);
+                        apoyo = parseInt(datos[keyVar].apoyo);
+                        //otro = parseInt(datos[keyVar].otro);
+                        paciente = parseInt(datos[keyVar].paciente);
+                        //console.log(datos[keyVar].apoyo);
+                    }
+                    //console.log(proveedor);
+                    //console.log(proveedor);
+                    
+                   cantT = parseInt(proveedor)+parseInt(cliente)+parseInt(profesional)+parseInt(unidad)+parseInt(apoyo)+parseInt(paciente);
+                   //console.log(cantT);
+                    
+                    //alert('...'+cantT);
+                    Highcharts.chart('pie2', {
+                        chart: {
+                            plotBackgroundColor: null,
+                            plotBorderWidth: null,
+                            plotShadow: false,
+                            type: 'pie'
+                        },
+                        title: {
+                            text: 'No Cumplimiento Por Item'
+                        },
+                        subtitle: {
+                            text: 'Universo: '+cantT+' registros',
+                        },
+                        tooltip: {
+                            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                        },
+                        plotOptions: {
+                            pie: {
+                                allowPointSelect: true,
+                                cursor: 'pointer',
+                                dataLabels: {
+                                    enabled: true,
+                                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                                    style: {
+                                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || '#a15ebe'
+                                    }
+                                }
+                            }
+                        },
+                        series: [{
+                            name: 'Porcentaje',
+                            colorByPoint: true,
+                            data: [{
+                                    name: 'Cliente',
+                                    y: cliente
+                                    //sliced: true,
+                                    //selected: true
+                                },{
+                                    name: 'Paciente',
+                                    y: paciente
+                                },{
+                                    name: 'Profesional',
+                                    y: profesional
+                                },{
+                                    name: 'Proveedor',
+                                    y: proveedor
+                                },{
+                                    name: 'Unidad de Apoyo',
+                                    y: apoyo,
+                                    //sliced: true,
+                                    //selected: true
+                                },{
+                                    name: 'Unidad de Negocio',
+                                    y: unidad
+                                }]
+                        }]
+                    });
+
+            }
+        });
+        
+        
+        
+        
+        
+          //PIE APOYO
+    $.ajax({
+            type: "GET",
+            url: "<?php echo base_url(); ?>" + "api/charts/pieAPOYO/",
+            dataType: 'json',
+            
+            success: function(datos){
+                var keyVar;
+                var dti = 0;
+                var comunicaciones = 0;
+                var operaciones = 0;
+                var calidad = 0;
+                var uaf = 0;
+                var contabilidad = 0;
+                var comercial = 0;
+                var cantT = 0;
+               
+                
+                    for(keyVar in datos) {
+                        //alert(datos[keyVar].plaUnidadDeApoyo);
+                        if(datos[keyVar].plaUnidadDeApoyo === 'DTI'){dti = parseInt(datos[keyVar].cant);}
+                        if(datos[keyVar].plaUnidadDeApoyo === 'COMUNICACIONES'){comunicaciones = parseInt(datos[keyVar].cant);}
+                        if(datos[keyVar].plaUnidadDeApoyo === 'CONTABILIDAD'){contabilidad = parseInt(datos[keyVar].cant);}
+                        
+                        if(datos[keyVar].plaUnidadDeApoyo === 'OPERACIONES'){operaciones = parseInt(datos[keyVar].cant);}
+                        if(datos[keyVar].plaUnidadDeApoyo === 'CALIDAD'){calidad = parseInt(datos[keyVar].cant);}
+                        if(datos[keyVar].plaUnidadDeApoyo === 'UAF-GESTION DE RRHH'){uaf = parseInt(datos[keyVar].cant);}
+                        
+                        if(datos[keyVar].plaUnidadDeApoyo === 'COMERCIAL'){comercial = parseInt(datos[keyVar].cant);}
+                        
+                        
+                    }
+                    //alert(dti);alert(comunicaciones);alert(contabilidad);
+                    //console.log(proveedor);
+                    //console.log(proveedor);
+                   cantT = dti+comunicaciones+contabilidad+operaciones+calidad+uaf+comercial;
+                   //console.log(cantT);
+                    
+                    
+                    Highcharts.chart('pie1', {
+                        chart: {
+                            plotBackgroundColor: null,
+                            plotBorderWidth: null,
+                            plotShadow: null,
+                            type: 'pie'
+                        },
+                        title: {
+                            text: 'No Cumplimiento Por Unidad de Apoyo'
+                        },
+                        subtitle: {
+                            text: 'Universo: '+cantT+' registros',
+                        },
+                        tooltip: {
+                            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                        },
+                        plotOptions: {
+                            pie: {
+                                allowPointSelect: true,
+                                cursor: 'pointer',
+                                dataLabels: {
+                                    enabled: true,
+                                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                                    style: {
+                                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || '#a15ebe'
+                                    }
+                                }
+                            }
+                        },
+                        series: [{
+                            name: 'Porcentaje',
+                            colorByPoint: true,
+                            data: [{
+                                    name: 'Calidad',
+                                    y: calidad,
+                                    //sliced: true,
+                                    //selected: true
+                                },{
+                                    name: 'Contabilidad',
+                                    y: contabilidad
+                                },{
+                                    name: 'Comercial',
+                                    y: comercial
+                                },{
+                                    name: 'Comunicaciones',
+                                    y: comunicaciones
+                                },{
+                                    name: 'UAF-Gestion de RRHH',
+                                    y: uaf
+                                },{
+                                    name: 'Dti',
+                                    y: dti
+                                },{
+                                    name: 'Operaciones',
+                                    y: operaciones
+                                }]
+                        }]
+                    });
+
+            }
+        });
+</script>
+
+
+
