@@ -102,7 +102,7 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
                     <div class='col-lg-12'><br></div>
                      <div class='col-lg-1'></div>
                      
-                     <div class="col-lg-10" style=" text-align: justify">
+                     <div class="col-lg-10" style=" text-align: justify; font-size: 9px">
                          <b>
                              De conformidad a lo señalado en el reglamento del MINSAL sobre el procedimiento de reclamo de la ley N°20.584, le informamos su facultad para recurrir ante la Superintendencia de Salud para presentar su reclamo
                          </b>

@@ -8,24 +8,49 @@ class Login_model extends CI_Model {
 		parent::__construct();
 	}
 	
-	public function loginUsuario($username,$password)
-	{    //die($password);
-                        $this->load->database('default');
-                        $query = $this->db  ->select('*')
-                                                            ->from('usuarios_panel')
-                                                            ->where('uspUsuario',$username)
-                                                            ->where('uspPassword',$password)
-                                                            ->where('uspEstado',1)
-                                                            ->get()
-                                                            ->row();
-                        //die(var_dump($query));
-                
-		if(!empty($query))
-		{
-                                        return $query;
-		}else{ 
-                                        return false;
-		}
+	public function loginUsuario($username,$password,$passwordSin)
+	{    
+            
+                        $db = $this->load->database('capacitacion', TRUE);
+                        $return =  $db->select('idcolaborador uspId')
+                                        ->from('colaboradores')
+                                        ->where('usuario',$username)
+                                        ->where('password',$passwordSin)
+                                        ->where('estado','A')
+                                        ->get()
+                                        ->row();
+                         
+                         IF(!empty($return)){
+                             $jefe =  $db->select('idunidad')
+                                        ->from('unidades')
+                                        ->where('director',$return->uspId)
+                                        ->or_where('jefe',$return->uspId)
+                                        ->where('estado','A')
+                                        ->get()
+                                        ->row();
+                             IF(!empty($jefe)){$jefes['uspJefe'] = 1; $jefes['uspId'] = $return->uspId; }ELSE {$jefes['uspJefe'] = 0; $jefes['uspId'] = $return->uspId; }
+                             $return = $jefes;
+                                $this->load->database('default',true);
+                                return $return;}
+                         ELSE {
+                            $this->load->database('default',true);
+                            $this->load->database('default');
+                            $return = $this->db  ->select('*')
+                                                                ->from('usuarios_panel')
+                                                                ->where('uspUsuario',$username)
+                                                                ->where('uspPassword',$password)
+                                                                ->where('uspEstado',1)
+                                                                ->get()
+                                                                ->row();
+                            IF(!empty($return)){$query['uspJefe'] = $return->uspJefe; $query['uspId'] = $return->uspId; }
+
+                            if(!empty($return))
+                            {
+                                                    return $query;
+                            }else{ 
+                                                    return false;
+                            }
+                    }
 	}
 	
 	

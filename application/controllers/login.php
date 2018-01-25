@@ -190,15 +190,17 @@ class Login extends CI_Controller
 				$username = $this->input->post('username',TRUE);
                                                                            //$username = str_replace('-', '', $username);
 				$password = md5($this->input->post('password',TRUE));
-				$check_user = $this->login_model->loginUsuario($username,$password);
+                                                                           $passwordSin = $this->input->post('password');
+				$check_user = $this->login_model->loginUsuario($username,$password,$passwordSin);
 				//die($check_user);
                                 ////////////REVISORAS///////////////
-				if($check_user == TRUE && $check_user->uspJefe !== '1')
+                //             die($check_user['uspJefe'].$check_user['uspId']);
+				if(($check_user['uspJefe'] === '0' || $check_user['uspJefe'] === 0) && $check_user['uspId'] !== '57' && $check_user['uspId'] !== '64' && $check_user['uspId'] !== '38')
 				{
 
                                                                                 $data = array(
                                                                                                'acceso_ok'     =>  'OK',
-                                                                                               'id_usuario'         =>  $check_user->uspId,
+                                                                                               'id_usuario'         =>  $check_user['uspId'],
                                                                                                'perfil'                    =>  '1',
                                                                                                'reloj'                     =>  date('Y-m-d H:i:s',strtotime ( '+60 minutes' )),
                                                                                                );	
@@ -208,7 +210,7 @@ class Login extends CI_Controller
                                                                                 //Guarda Log
                                                                                 $this->usuarios_panel_log_model->uplPerfil = 1;
                                                                                 $this->usuarios_panel_log_model->uplFecha = date('Y-m-d H:i:s');
-                                                                                $this->usuarios_panel_log_model->uplUsuario = $check_user->uspId;
+                                                                                $this->usuarios_panel_log_model->uplUsuario = $check_user['uspId'];
                                                                                 $this->usuarios_panel_log_model->uplDescripcion = "Acceso a panel de control";
                                                                                 $this->usuarios_panel_log_model->guardarLog();
 
@@ -216,13 +218,13 @@ class Login extends CI_Controller
 
 				} 
                                 //////////////////JEFE UNIDAD///////////////////////
-                                                                            elseif($check_user == TRUE && $check_user->uspJefe === '1')
+                                                                            elseif($check_user['uspId'] === '57' || $check_user['uspId'] === '64' || $check_user['uspId'] === '38')
 				{
 
                                                                                 $data = array(
                                                                                                'acceso_ok'     =>  'OK',
-                                                                                               'id_usuario'         =>  $check_user->uspId,
-                                                                                               'perfil'                    =>  '4',
+                                                                                               'id_usuario'         =>  $check_user['uspId'],
+                                                                                               'perfil'                    =>  '3',
                                                                                                'reloj'                     =>  date('Y-m-d H:i:s',strtotime ( '+60 minutes' )),
                                                                                                );	
 
@@ -231,27 +233,42 @@ class Login extends CI_Controller
                                                                                 //Guarda Log
                                                                                 $this->usuarios_panel_log_model->uplPerfil = 3;
                                                                                 $this->usuarios_panel_log_model->uplFecha = date('Y-m-d H:i:s');
-                                                                                $this->usuarios_panel_log_model->uplUsuario = $check_user->uspId;
+                                                                                $this->usuarios_panel_log_model->uplUsuario = $check_user['uspId'];
                                                                                 $this->usuarios_panel_log_model->uplDescripcion = "Acceso a panel de control";
                                                                                 $this->usuarios_panel_log_model->guardarLog();
 
                                                                                 $this->index();
 
 				} 
-                                else {
-                                    //die('false');
-                                    echo "<script>alert('Usuario o password mal ingresados.');
-                                    window.location.href='".base_url()."';</script>";
-                                    
-                                    //echo "<script>window.location.href='".base_url()."';</script>";
-                                    //redirect(base_url());
-                                }
-		//	}else die('aca');
-                        
-		//else{
-		//	echo "<script>
-                                     //      window.location.href='".base_url()."';</script>";
-		//
+                                                                            elseif($check_user['uspJefe'] === 1)
+				{
+
+                                                                                $data = array(
+                                                                                               'acceso_ok'     =>  'OK',
+                                                                                               'id_usuario'         =>  $check_user['uspId'],
+                                                                                               'perfil'                    =>  '4',
+                                                                                               'reloj'                     =>  date('Y-m-d H:i:s',strtotime ( '+60 minutes' )),
+                                                                                               );	
+
+                                                                                $this->session->set_userdata($data);	
+
+                                                                                //Guarda Log
+                                                                                $this->usuarios_panel_log_model->uplPerfil = 4;
+                                                                                $this->usuarios_panel_log_model->uplFecha = date('Y-m-d H:i:s');
+                                                                                $this->usuarios_panel_log_model->uplUsuario = $check_user['uspId'];
+                                                                                $this->usuarios_panel_log_model->uplDescripcion = "Acceso a panel de control";
+                                                                                $this->usuarios_panel_log_model->guardarLog();
+
+                                                                                $this->index();
+
+				} 
+                                                                        else {die;
+                                                                            echo "<script>alert('Usuario o password mal ingresados.');
+                                                                            window.location.href='".base_url()."';</script>";
+
+                                                                            
+                                                                        }
+		
 	}
         
         

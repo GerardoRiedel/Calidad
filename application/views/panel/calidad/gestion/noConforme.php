@@ -125,7 +125,19 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
                         <input type="checkbox" id="paciente" name="plaPaciente" <?php IF(!empty($planilla->plaPaciente) && $planilla->plaPaciente === '1')echo 'checked'; ?> value="1">
                         &nbsp;<label>No Cumplimiento de Paciente</label> 
                     </div>
-                    <div class="col-lg-4"></div>
+                    <div class="col-lg-4">
+                        
+                       <?php //die(var_dump($planilla));?><label>Peritaje</label> 
+                    <select name="plaTipo" >
+                                <option>Seleccione Tipo Peritaje</option>
+                                <?php FOREACH($listarTipos as $tip){ ?>
+                                    <option value="<?php echo $tip->tipId; ?>" <?php IF(!empty($planilla->plaTipo) && $planilla->plaTipo === $tip->tipId) echo 'selected'; ?> ><?php echo $tip->tipNombre; ?></option>
+                                <?php } ?>
+                            </select>
+                    
+                        
+                        
+                    </div>
                         <div class="col-lg-4" style="padding-left:42px">
                             <select name="plaUnidadDeApoyo" style="width:300px;" >
                                 <option>Seleccione unidad de apoyo...</option>
@@ -144,6 +156,9 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
                         <input type="checkbox"  id="plaNoAplica" name="noaplica" <?php IF(!empty($planilla->plaNoAplica) && $planilla->plaNoAplica === '1')echo 'checked'; ?> value="1">
                         &nbsp;<label>N/A</label> <input type="text" name="plaNoAplicaText" placeholder="Especifique..." value="<?php IF(!empty($planilla->plaNoAplicaText)) echo $planilla->plaNoAplicaText;?>">
                     </div>
+                     <div class="col-lg-12"></div>
+                    
+                    
                      <div class="col-lg-12"></div>
                     <div class='col-lg-12'><br></div>
                     
@@ -404,6 +419,7 @@ function formatearRut(rut){
                                 <td style="font-size: 9px;background-color: #A9A9A9;" align="center">Descripcion</td>
                                 <td style="font-size: 9px;background-color: #A9A9A9;" align="center">Accion</td>
                                 <td style="font-size: 9px;background-color: #A9A9A9;" align="center">Seguimiento</td>
+                                <td style="font-size: 9px;background-color: #A9A9A9;" align="center">Peritaje</td>
                                 <td style="font-size: 9px;background-color: #A9A9A9;" align="center">No<br>Cumplimiento<br>de Proveedor</td>
                                 <td style="font-size: 9px;background-color: #A9A9A9;" align="center">No<br>Cumplimiento<br>de Cliente</td>
                                 <td style="font-size: 9px;background-color: #A9A9A9;" align="center">No<br>Cumplimiento<br>de Profesional</td>
@@ -461,6 +477,8 @@ function formatearRut(rut){
                                                                                                                                                                                         }
                                                                                                                                                                                     ?>
                                 </td>
+                                <td style="font-size: 9px;background-color: <?php echo $color; ?>" align="center"><?php IF(!empty($item->plaTipo)  && $item->plaTipo==='1')   echo 'Neuroquirurgico' ; ELSEIF(!empty($item->plaTipo)  && $item->plaTipo==='2')   echo 'Psiquiatrico' ;ELSEIF(!empty($item->plaTipo)  && $item->plaTipo==='3')   echo 'Traumatologico ' ; ?></td>
+                                
                                 <td style="font-size: 9px;background-color: <?php echo $color; ?>" align="center"><?php IF(!empty($item->plaProveedor)    && $item->plaProveedor==='1')   echo '1' ; ?></td>
                                 <td style="font-size: 9px;background-color: <?php echo $color; ?>" align="center"><?php IF(!empty($item->plaCliente)          && $item->plaCliente==='1')         echo '1' ; ?></td>
                                 <td style="font-size: 9px;background-color: <?php echo $color; ?>" align="center"><?php IF(!empty($item->plaProfesional)  && $item->plaProfesional==='1') echo '1' ; ?></td>

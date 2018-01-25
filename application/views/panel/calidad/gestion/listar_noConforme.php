@@ -63,9 +63,9 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
                                 <th style="font-size: 8px">No Cumplimiento de Paciente</th>
                                 <th style="font-size: 8px">No Cumplimiento de Unidad</th>
                                 <th style="font-size: 8px">No Cumplimiento de Unidad de Apoyo</th>
-                                <!--
+                                
                                 <th style="font-size: 8px">No Aplica</th>
-                                -->
+                                
                                 <th style="font-size: 8px">Gestion</th>
                             </tr>
                         </thead>
@@ -110,9 +110,9 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
                                 <td style="font-size: 8px;" align="center"><?php IF(!empty($item->plaPaciente)      && $item->plaPaciente==='1') echo 'SI' ; ?></td>
                                 <td style="font-size: 8px;" align="center"><?php IF(!empty($item->plaUnidadCheck)&& $item->plaUnidadCheck==='1')echo 'SI' ; ?></td>
                                 <td style="font-size: 8px;" align="center"><?php IF(!empty($item->plaUnidadDeApoyoCheck)&& $item->plaUnidadDeApoyoCheck==='1')echo 'SI' ; ?></td>
-                                <!--
+                                
                                 <td style="font-size: 8px;" align="center"><?php IF(!empty($item->plaNoAplica)       && $item->plaNoAplica==='1')      echo 'SI' ; ?></td>
-                                -->
+                                
                                 <td align="center">
                                     <?php IF($this->session->userdata('perfil') == '3'){ ?>
                          
@@ -167,6 +167,8 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
                                 <td style="font-size: 9px;background-color: #A9A9A9;" align="center">Descripcion</td>
                                 <td style="font-size: 9px;background-color: #A9A9A9;" align="center">Accion</td>
                                 <td style="font-size: 9px;background-color: #A9A9A9;" align="center">Seguimiento</td>
+                                <td style="font-size: 9px;background-color: #A9A9A9;" align="center">Tipo Peritaje</td>
+                                
                                 <td style="font-size: 9px;background-color: #A9A9A9;" align="center">No<br>Cumplimiento<br>de Proveedor</td>
                                 <td style="font-size: 9px;background-color: #A9A9A9;" align="center">No<br>Cumplimiento<br>de Cliente</td>
                                 <td style="font-size: 9px;background-color: #A9A9A9;" align="center">No<br>Cumplimiento<br>de Profesional</td>                               
@@ -221,6 +223,8 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
                                                                                                                                                                                         echo $seguimiento; 
                                                                                                                                                                                     ?>
                                 </td>
+                                <td style="font-size: 9px;background-color: <?php echo $color; ?>" align="center"><?php IF(!empty($item->plaTipo)  && $item->plaTipo==='1')   echo 'Neuroquirurgico' ; ELSEIF(!empty($item->plaTipo)  && $item->plaTipo==='2')   echo 'Psiquiatrico' ;ELSEIF(!empty($item->plaTipo)  && $item->plaTipo==='3')   echo 'Traumatologico ' ; ?></td>
+                                
                                 <td style="font-size: 9px;background-color: <?php echo $color; ?>" align="center"><?php IF(!empty($item->plaProveedor)    && $item->plaProveedor==='1')   echo '1' ; ?></td>
                                 <td style="font-size: 9px;background-color: <?php echo $color; ?>" align="center"><?php IF(!empty($item->plaCliente)          && $item->plaCliente==='1')         echo '1' ; ?></td>
                                 <td style="font-size: 9px;background-color: <?php echo $color; ?>" align="center"><?php IF(!empty($item->plaProfesional)  && $item->plaProfesional==='1') echo '1' ; ?></td>

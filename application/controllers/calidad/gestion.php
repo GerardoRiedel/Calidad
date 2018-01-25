@@ -516,6 +516,7 @@ class gestion extends CI_Controller {
         $colaborador    = $this->parametros_model->dameColaborador($id_usuario);
         $jefe                   = $this->parametros_model->dameJefe($id_usuario);
         $data['listarUnidades'] = $this->parametros_model->dameUnidadesApoyo();
+        $data['listarTipos'] = $this->parametros_model->dameTipos();
             //die(var_dump($jefe));
         //die;
         IF(!empty($colaborador->idunidad) && $colaborador->idunidad==='31')$colaborador->idunidad=4;
@@ -575,6 +576,7 @@ class gestion extends CI_Controller {
         
         $this->parametros_model->plaFechaHecho = $fecha;
         $this->parametros_model->plaMotivo = $this->input->post('motivo');
+        $this->parametros_model->plaTipo = $this->input->post('plaTipo');
         $this->parametros_model->plaDescripcion = $this->input->post('descripcion');
         $this->parametros_model->plaAccion = $this->input->post('accion');
         
@@ -613,6 +615,7 @@ class gestion extends CI_Controller {
         $id_usuario = $this->session->userdata('id_usuario');
         $colaborador    = $this->parametros_model->dameColaborador($id_usuario);
         $jefe                   = $this->parametros_model->dameJefe($id_usuario);
+        $data['listarTipos'] = $this->parametros_model->dameTipos();
         //IF(strtoupper($jefe->nombre) === strtoupper($colaborador->nombre) && strtoupper($jefe->apellidoPaterno) === strtoupper($colaborador->apellidoPaterno)  || $colaborador->id === '57' || $colaborador->id === '64' || $colaborador->id === '285' || $colaborador->id === '38'){
         IF(!empty($colaborador) && (!empty($jefe)  || $colaborador->id === '57' || $colaborador->id === '64' || $colaborador->id === '38')){
             $data['jefeUnidad'] = 'SI';
@@ -1341,6 +1344,7 @@ class gestion extends CI_Controller {
      public function listar_reclamos_jefe()
     {
         $colaborador = $this->parametros_model->dameColaborador($this->session->userdata('id_usuario'));
+  //      die(var_dump($colaborador));
              IF($colaborador->idunidad==='31')$colaborador->idunidad=4;
              ELSEIF($colaborador->idunidad==='25')$colaborador->idunidad=3;
              ELSEIF($this->session->userdata('id_usuario')==='141')$colaborador->idunidad=30;

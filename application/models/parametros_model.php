@@ -101,6 +101,13 @@ class Parametros_model extends CI_Model
             $this->db->insert('planillas', $this);
     }
     
+    public function dameTipos()
+    {
+        return $this->db->select('*')
+                        ->from('tipos')
+                        ->get()
+                        ->result();
+    }
     public function dameTodo()
     {
         return $this->db->select('*')
