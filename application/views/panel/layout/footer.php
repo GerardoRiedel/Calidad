@@ -36,7 +36,7 @@
                 success: function(data){
                     if(data === 'NO'){
                         alert('Session Terminada');
-                        window.location.href = "http://www.cetep.cl/calidad/index.php/login/logout_ci";
+                        window.location.href = "http://www.cetep.cl/calidad/index.php/login/salirSinGuardar";
                     }
                     //else if(data === 'POR'){
                     //    alert('Estimado usuario recuerde que su sesión esta por terminar');

@@ -159,6 +159,12 @@ class Login extends CI_Controller
                 // echo    '<script>window.close();</script>';
                 //header('location: http://www.cetep.cl/intracetep');
         }
+        public function salirSinGuardar()
+    {
+            $this->session->sess_destroy();
+            redirect(base_url());
+    }
+    
         public function guardarLog(){
              //Guarda Log
                 $this->usuarios_panel_log_model->uplFecha = date('Y-m-d H:i:s');

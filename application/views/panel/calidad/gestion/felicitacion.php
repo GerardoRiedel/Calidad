@@ -24,7 +24,7 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: tr
         <div class="row">
             <div class="col-xs-12">
 			
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 bhoechie-tab-container" style="border-color: grey;"  >
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 bhoechie-tab-container">
         <div style="margin-left: 140px; margin-top:20px">
             <!--
         <a href="<?php echo base_url("calidad/sugerencia/inicio"); ?>"><img src="../../../../calidad/assets/img/volver.png" style="height:50px"></a>

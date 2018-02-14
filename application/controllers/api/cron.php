@@ -123,19 +123,21 @@ class Cron extends CI_Controller
 	$diasferiados = array(
        //FORMATO Y-m-d   
         '1-1', // Año Nuevo (irrenunciable) 
-        '10-4', // Viernes Santo (feriado religioso) 
-        '11-4', // Sábado Santo (feriado religioso) 
+        '30-3', // Viernes Santo (feriado religioso) 
+        '31-3', // Sábado Santo (feriado religioso) 
         '1-5', // Día Nacional del Trabajo (irrenunciable) 
         '21-5', // Día de las Glorias Navales 
-        '29-6', // San Pedro y San Pablo (feriado religioso) 
+        '2-7', // San Pedro y San Pablo (feriado religioso) 
         '16-7', // Virgen del Carmen (feriado religioso) 
         '15-8', // Asunción de la Virgen (feriado religioso) 
+        '17-9', // Dia Festivo De Prueba EN EL EJEMPLO <-----
+        '18-9', // Dia Festivo De Prueba EN EL EJEMPLO <-----
         '19-9', // Dia Festivo De Prueba EN EL EJEMPLO <-----
-        '12-10', // Aniversario del Descubrimiento de América 
-        '31-10', // Día Nacional de las Iglesias Evangélicas y Protestantes (feriado religioso) 
+        '15-10', // Aniversario del Descubrimiento de América 
+        '2-11', // Día Nacional de las Iglesias Evangélicas y Protestantes (feriado religioso) 
         '1-11', // Día de Todos los Santos (feriado religioso) 
         '8-12', // Inmaculada Concepción de la Virgen (feriado religioso) 
-        '13-12', // elecciones presidencial y parlamentarias (puede que se traslade al domingo 13) 
+       // '13-12', // elecciones presidencial y parlamentarias (puede que se traslade al domingo 13) 
         '25-12', // Natividad del Señor (feriado religioso) (irrenunciable) 
         );
 	// Arreglo de dias habiles, inicianlizacion

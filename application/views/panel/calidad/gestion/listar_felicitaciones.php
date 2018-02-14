@@ -16,14 +16,14 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
     <div class="container-fluid">
         <div class="row">
             <div class="col-xs-12"></div>
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 bhoechie-tab-container" style="border-color: #000000;"  >
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 bhoechie-tab-container"  >
                 
                 <div  class="col-lg-12" style="overflow: auto;">
                     
                 <table class='table table-bordered table-hover table-striped data-table'>
                         <thead>
                             <tr>
-                                <th style="max-width: 0px"></th>
+                                <th style="display:none"></th>
                                 <th>Fecha Registro</th>
                                 <th>Run</th>
                                 <th style=" display: none">Run</th>
@@ -38,8 +38,8 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
                         <tbody>
                                 <?php foreach ($felicitaciones as $item) : ?>
                             <tr>
-                                <td style=" border-right: transparent;"></td>
-                                <td style=" border-left: transparent;font-size:9px"><?php $date = new DateTime($item->sugFecha);echo $date->format('d-m-Y H:i');//echo $item->id; ?></td>
+                                <td style="display:none;"><?php $date = new DateTime($item->sugFecha);echo $date->format('Y-m-d');?></td>
+                                <td style=" border-left: transparent;font-size:9px"><?php $date = new DateTime($item->sugFecha);echo $date->format('d-m-Y');//echo $item->id; ?></td>
                                 <td style="font-size:9px"><?php if(!empty($item->sugRut)) echo formatearRut($item->sugRut); ?></td>
                                 <td style="display:none"><?php if(!empty($item->sugRut)) echo $item->sugRut; ?></td>
                                 <td style="font-size:9px"><?php echo strtoupper($item->sugNombre).' '.strtoupper($item->sugApePat).' '.strtoupper($item->sugApeMat); ?></td>
