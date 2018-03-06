@@ -11,7 +11,7 @@ class Charts_model extends CI_Model
     
     public function piePSNC()
     {
-      return  $this->db->select('sum(plaProveedor)proveedor,sum(plaCliente)cliente,sum(plaProfesional)profesional,sum(plaUnidadCheck)unidad,sum(plaUnidadDeApoyoCheck)apoyo,sum(plaPaciente)paciente')
+      return  $this->db->select('sum(plaProveedor)proveedor,sum(plaCliente)cliente,sum(plaProfesional)profesional,sum(plaUnidadCheck)unidad,sum(plaUnidadDeApoyoCheck)apoyo,sum(plaPaciente)paciente,sum(plaNoAplica)otro')
                 ->from('planillas')
                 ->where('plaEstado !=',5)        
                 ->get()

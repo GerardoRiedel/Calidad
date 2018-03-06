@@ -79,14 +79,14 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
                     <div class="col-lg-12">
                         <label>Describa</label> 
                     </div>
-                    <div class='col-lg-12'>
-                        <textarea name="descripcion" style=" width: 100%; height: 100px" placeholder="Describa aquí lo sucedido PSNC / Informado por" required <?php IF(!empty($planilla)) echo 'readonly'; ?>><?php IF(!empty($planilla->plaDescripcion))echo $planilla->plaDescripcion; ?></textarea>
+                <div class='col-lg-12' >
+                        <textarea name="descripcion" style=" width: 100%; height: 200px; overflow: hidden " placeholder="Describa aquí lo sucedido PSNC / Informado por" required <?php IF(!empty($planilla)) echo 'readonly'; ?>><?php IF(!empty($planilla->plaDescripcion))echo $planilla->plaDescripcion; ?></textarea>
                     </div>
                     <div class="col-lg-12">
                         <label>Acción Inmediata</label> 
                     </div>
                     <div class='col-lg-12'>
-                        <textarea name="accion" style=" width: 100%; height: 100px" placeholder="Describa Aquí La Acción Inmediata Realizada" <?php //IF(!empty($planilla) && $planilla != '0') echo 'readonly'; ?>><?php IF(!empty($planilla->plaAccion))echo $planilla->plaAccion; ?></textarea>
+                        <textarea name="accion" style=" width: 100%; height: 100px;  overflow: hidden" placeholder="Describa Aquí La Acción Inmediata Realizada" <?php //IF(!empty($planilla) && $planilla != '0') echo 'readonly'; ?>><?php IF(!empty($planilla->plaAccion))echo $planilla->plaAccion; ?></textarea>
                     </div>
                     <div class='col-lg-12'><br></div>
                     
@@ -167,7 +167,7 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
                         <label>Descripción / Observaciones / Seguimiento de Respuesta</label> 
                     </div>
                     <div class='col-lg-12'>
-                        <textarea name="seguimiento" style=" width: 100%; height: 100px" placeholder="Ingrese Aquí el Seguimiento de Respuesta" <?php IF(!empty($planilla)) echo 'required'; ?>><?php IF(!empty($planilla->plaSeguimiento))echo $planilla->plaSeguimiento; ?></textarea>
+                        <textarea name="seguimiento" style=" width: 100%; height: 100px; overflow: hidden" placeholder="Ingrese Aquí el Seguimiento de Respuesta" <?php IF(!empty($planilla)) echo 'required'; ?>><?php IF(!empty($planilla->plaSeguimiento))echo $planilla->plaSeguimiento; ?></textarea>
                     </div>
                     <div class='col-lg-12'><br></div>
                     
@@ -542,7 +542,7 @@ function formatearRut(rut){
                 var unidad = 0;
                 var apoyo = 0;
                 var cantT = 0;
-                //var otro = 0;
+                var otro = 0;
                 var paciente = 0;
                 
                     for(keyVar in datos) {
@@ -551,14 +551,14 @@ function formatearRut(rut){
                         profesional = parseInt(datos[keyVar].profesional);
                         unidad = parseInt(datos[keyVar].unidad);
                         apoyo = parseInt(datos[keyVar].apoyo);
-                        //otro = parseInt(datos[keyVar].otro);
+                        otro = parseInt(datos[keyVar].otro);
                         paciente = parseInt(datos[keyVar].paciente);
                         //console.log(datos[keyVar].apoyo);
                     }
                     //console.log(proveedor);
                     //console.log(proveedor);
                     
-                   cantT = parseInt(proveedor)+parseInt(cliente)+parseInt(profesional)+parseInt(unidad)+parseInt(apoyo)+parseInt(paciente);
+                   cantT = parseInt(proveedor)+parseInt(cliente)+parseInt(profesional)+parseInt(unidad)+parseInt(apoyo)+parseInt(paciente)+parseInt(otro);
                    //console.log(cantT);
                     
                     //alert('...'+cantT);
@@ -600,6 +600,9 @@ function formatearRut(rut){
                                     //sliced: true,
                                     //selected: true
                                 },{
+                                    name: 'No aplica',
+                                    y: otro
+                                },{
                                     name: 'Paciente',
                                     y: paciente
                                 },{
@@ -610,7 +613,7 @@ function formatearRut(rut){
                                     y: proveedor
                                 },{
                                     name: 'Unidad de Apoyo',
-                                    y: apoyo,
+                                    y: apoyo
                                     //sliced: true,
                                     //selected: true
                                 },{
@@ -642,6 +645,7 @@ function formatearRut(rut){
                 var uaf = 0;
                 var contabilidad = 0;
                 var comercial = 0;
+                var desarrollo = 0;
                 var cantT = 0;
                
                 
@@ -653,7 +657,8 @@ function formatearRut(rut){
                         
                         if(datos[keyVar].plaUnidadDeApoyo === 'OPERACIONES'){operaciones = parseInt(datos[keyVar].cant);}
                         if(datos[keyVar].plaUnidadDeApoyo === 'CALIDAD'){calidad = parseInt(datos[keyVar].cant);}
-                        if(datos[keyVar].plaUnidadDeApoyo === 'UAF-GESTION DE RRHH'){uaf = parseInt(datos[keyVar].cant);}
+                        if(datos[keyVar].plaUnidadDeApoyo === 'DESARROLLO ORGANIZACIONAL'){desarrollo = parseInt(datos[keyVar].cant);}
+                        if(datos[keyVar].plaUnidadDeApoyo === 'UAF-GESTION DE RRHH' || datos[keyVar].plaUnidadDeApoyo === 'GESTION DE RRHH'){uaf = parseInt(datos[keyVar].cant);}
                         
                         if(datos[keyVar].plaUnidadDeApoyo === 'COMERCIAL'){comercial = parseInt(datos[keyVar].cant);}
                         
@@ -662,7 +667,7 @@ function formatearRut(rut){
                     //alert(dti);alert(comunicaciones);alert(contabilidad);
                     //console.log(proveedor);
                     //console.log(proveedor);
-                   cantT = dti+comunicaciones+contabilidad+operaciones+calidad+uaf+comercial;
+                   cantT = dti+comunicaciones+contabilidad+operaciones+calidad+uaf+comercial+desarrollo;
                    //console.log(cantT);
                     
                     
@@ -713,14 +718,17 @@ function formatearRut(rut){
                                     name: 'Comunicaciones',
                                     y: comunicaciones
                                 },{
-                                    name: 'UAF-Gestion de RRHH',
-                                    y: uaf
+                                    name: 'Desarrollo Organizacional',
+                                    y: desarrollo
                                 },{
                                     name: 'Dti',
                                     y: dti
                                 },{
                                     name: 'Operaciones',
                                     y: operaciones
+                                },{
+                                    name: 'UAF-Gestion de RRHH',
+                                    y: uaf
                                 }]
                         }]
                     });

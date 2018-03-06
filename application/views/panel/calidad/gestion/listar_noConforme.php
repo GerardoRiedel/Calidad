@@ -295,7 +295,7 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
                 var unidad = 0;
                 var apoyo = 0;
                 var cantT = 0;
-                //var otro = 0;
+                var otro = 0;
                 var paciente = 0;
                 
                     for(keyVar in datos) {
@@ -304,7 +304,7 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
                         profesional = parseInt(datos[keyVar].profesional);
                         unidad = parseInt(datos[keyVar].unidad);
                         apoyo = parseInt(datos[keyVar].apoyo);
-                        //otro = parseInt(datos[keyVar].otro);
+                        otro = parseInt(datos[keyVar].otro);
                         paciente = parseInt(datos[keyVar].paciente);
                         //console.log(datos[keyVar].apoyo);
                     }
@@ -353,6 +353,9 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
                                     //sliced: true,
                                     //selected: true
                                 },{
+                                    name: 'No aplica',
+                                    y: otro
+                                },{
                                     name: 'Paciente',
                                     y: paciente
                                 },{
@@ -395,6 +398,7 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
                 var uaf = 0;
                 var contabilidad = 0;
                 var comercial = 0;
+                var desarrollo = 0;
                 var cantT = 0;
                
                 
@@ -406,7 +410,8 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
                         
                         if(datos[keyVar].plaUnidadDeApoyo === 'OPERACIONES'){operaciones = parseInt(datos[keyVar].cant);}
                         if(datos[keyVar].plaUnidadDeApoyo === 'CALIDAD'){calidad = parseInt(datos[keyVar].cant);}
-                        if(datos[keyVar].plaUnidadDeApoyo === 'UAF-GESTION DE RRHH'){uaf = parseInt(datos[keyVar].cant);}
+                        if(datos[keyVar].plaUnidadDeApoyo === 'DESARROLLO ORGANIZACIONAL'){desarrollo = parseInt(datos[keyVar].cant);}
+                        if(datos[keyVar].plaUnidadDeApoyo === 'UAF-GESTION DE RRHH' || datos[keyVar].plaUnidadDeApoyo === 'GESTION DE RRHH'){uaf = parseInt(datos[keyVar].cant);}
                         
                         if(datos[keyVar].plaUnidadDeApoyo === 'COMERCIAL'){comercial = parseInt(datos[keyVar].cant);}
                         
@@ -415,7 +420,7 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
                     //alert(dti);alert(comunicaciones);alert(contabilidad);
                     //console.log(proveedor);
                     //console.log(proveedor);
-                   cantT = dti+comunicaciones+contabilidad+operaciones+calidad+uaf+comercial;
+                   cantT = dti+comunicaciones+contabilidad+operaciones+calidad+uaf+comercial+desarrollo;
                    //console.log(cantT);
                     
                     
@@ -466,14 +471,17 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
                                     name: 'Comunicaciones',
                                     y: comunicaciones
                                 },{
-                                    name: 'UAF-Gestion de RRHH',
-                                    y: uaf
+                                    name: 'Desarrollo Organizacional',
+                                    y: desarrollo
                                 },{
                                     name: 'Dti',
                                     y: dti
                                 },{
                                     name: 'Operaciones',
                                     y: operaciones
+                                },{
+                                    name: 'UAF-Gestion de RRHH',
+                                    y: uaf
                                 }]
                         }]
                     });

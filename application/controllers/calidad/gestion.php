@@ -252,7 +252,7 @@ class gestion extends CI_Controller {
             ELSEIF($uni === '2')$unidadDescripcion= 'UNIDAD GESTION HOSPITALARIO';
             ELSEIF($uni === '3')$unidadDescripcion= 'UNIDAD PERITAJE CLÍNICO';
             ELSEIF($uni === '30')$unidadDescripcion= 'UNIDAD SALUD LABORAL';
-            ELSEIF($uni === '13')$unidadDescripcion= 'MIRANDES CLINICA';
+            ELSEIF($uni === '13'){$unidadDescripcion= 'MIRANDES CLINICA';$mirandes='si';}
             ELSE $unidadDescripcion = $uni;
         $correoJefe = $this->sugerencia_model->dameCorreoUnidad($uni);
         
@@ -317,10 +317,16 @@ class gestion extends CI_Controller {
         
         IF(!empty($correoJefe)){
             $correoJefe=$correoJefe->correoDirector.",".$correoJefe->correoJefe;
-            $headers .= "bcc: griedel@cetep.cl,cbarrera@cetep.cl,marcelapaz@cetep.cl,".$correoJefe."\r\n";
+            //$headers .= "bcc: griedel@cetep.cl,cbarrera@cetep.cl,marcelapaz@cetep.cl,".$correoJefe."\r\n";
+            IF($mirandes==='si'){$headers .= "bcc: griedel@cetep.cl,cbarrera@cetep.cl,marcelapaz@cetep.cl,dconcha@mirandes.cl,comunicaciones@cetep.cl,".$correoJefe."\r\n";}
+            ELSE {$headers .= "bcc: griedel@cetep.cl,cbarrera@cetep.cl,marcelapaz@cetep.cl,comunicaciones@cetep.cl,".$correoJefe."\r\n";}
+         
         }
-        ELSE $headers .= "bcc: griedel@cetep.cl,cbarrera@cetep.cl,marcelapaz@cetep.cl\r\n";
-        
+        ELSE {
+            IF($mirandes==='si'){$headers .= "bcc: griedel@cetep.cl,cbarrera@cetep.cl,marcelapaz@cetep.cl,dconcha@mirandes.cl,comunicaciones@cetep.cl\r\n";}
+            ELSE {$headers .= "bcc: griedel@cetep.cl,cbarrera@cetep.cl,marcelapaz@cetep.cl,comunicaciones@cetep.cl\r\n";}
+            //$headers .= "bcc: griedel@cetep.cl,cbarrera@cetep.cl,marcelapaz@cetep.cl\r\n";
+        }
         $asunto = 'Felicitación o sugerencia';
         //IF(!empty($email))$destinatario = $email; ELSE $destinatario = '';        
         $destinatario = 'calidad@cetep.cl';
@@ -352,7 +358,7 @@ class gestion extends CI_Controller {
         $nombre = strtoupper($reclamo->recNombre)." ".strtoupper($reclamo->recApePat)." ".strtoupper($reclamo->recApeMat);
         $area = strtoupper($unidad->descripcion);
         $domicilio = strtoupper($reclamo->recDomicilio);
-        $comuna = strtoupper($reclamo->comNombre);
+        $comuna = strtoupper($reclamo->comNombre);$comuna = str_replace('&NTILDE;','Ñ',$comuna);
         $telefono = $reclamo->recTelefono;
         $email = strtoupper($reclamo->recEmail);
         $respuesta = $reclamo->recRespuesta; IF($respuesta === '1')$respuesta = 'SI'; ELSE $respuesta = 'NO';
@@ -380,9 +386,10 @@ class gestion extends CI_Controller {
                 <td rowspan='2' style='width:650px'>";
                     
                         IF($area === 'MIRANDES HD y RH' || $area === 'MIRANDES CLINICA ' || $area === 'MIRANDES HD CONCEPCION' || $area === 'MIRANDES HD RANCAGUA' ){
-
+                                    $mirandes='si';
                                     $resumen .= "<img style='width: 20%; ' src='".base_url()."../assets/img/mirAndes.png' >";
                         }ELSE {
+                                    $mirandes='no';
                                     $resumen .= "<img style='width: 20%; ' src='".base_url()."../assets/img/logo_vertical_cetep.png' >";
                         }
          $resumen .="
@@ -400,7 +407,7 @@ class gestion extends CI_Controller {
             <tr>
                 <td colspan='2'>Paciente</td>
                 <td style='border:none'></td>
-                <td colspan='2'>Apoderado o Representancte legal según ley N°20.584</td>
+                <td colspan='2'>Apoderado o Representante legal según ley N°20.584</td>
             </tr>
             <tr>
                 <td style='width:199px'>Nombre y Apellido</td>
@@ -438,10 +445,10 @@ class gestion extends CI_Controller {
                 <td>".$apoComuna."</td>
             </tr>
             <tr>
-                <td>Telefono</td>
+                <td>Teléfono</td>
                 <td>".$telefono."</td>
                 <td style='border:none'></td>
-                <td>Telefono</td>
+                <td>Teléfono</td>
                 <td>".$apoTelefono."</td>
             </tr>
             <tr>
@@ -496,13 +503,15 @@ class gestion extends CI_Controller {
         $headers2 = "MIME-Version: 1.0\r\n"; 
         $headers2 .= "Content-type: text/html; charset=utf-8\r\n"; 
         $headers2 .= "From: Calidad <calidad@cetep.cl>\r\n"; //dirección del remitente 
-        $headers2 .= "bcc: calidad@cetep.cl,griedel@cetep.cl,cbarrera@cetep.cl,marcelapaz@cetep.cl\r\n";
+        IF($mirandes==='si'){$headers2 .= "bcc: calidad@cetep.cl,griedel@cetep.cl,cbarrera@cetep.cl,dconcha@mirandes.cl,comunicaciones@cetep.cl,marcelapaz@cetep.cl\r\n";}
+        ELSE $headers2 .= "bcc: calidad@cetep.cl,griedel@cetep.cl,cbarrera@cetep.cl,comunicaciones@cetep.cl,marcelapaz@cetep.cl\r\n";
+        //$headers2 .= "bcc: calidad@cetep.cl,griedel@cetep.cl,cbarrera@cetep.cl,marcelapaz@cetep.cl\r\n";
         $destinatario=$unidad->correoDirector.",".$unidad->correoJefe;
 
         $resumen2 = 'Estimada Jefatura,<br><br>'
                 . 'Se ha recibido el  reclamo descrito a continuación.<br>'
                 . 'Para responderlo favor seguir el siguiente link ingresando con su usuario y clave de intracetep, o ingresar a la plataforma a traves de su <b>intracetep</b>-><b>unidad de calidad</b><br>'
-                . 'LINK: <a href="http://www.cetep.cl/calidad"><b>Responder</b></a>';
+                . 'LINK: <a href="http://www.cetep.cl/calidad/index.php"><b>Responder</b></a>';
     $resumen2 = $resumen2."<br><br>".$resumen;
     mail($destinatario,$asunto,$resumen2,$headers2) ;
     $data = array('recId' => $id);$this->session->set_userdata($data);	
@@ -833,9 +842,9 @@ class gestion extends CI_Controller {
         
         
         $nombre = $reclamo->recNombre." ".$reclamo->recApePat." ".$reclamo->recApeMat;
-        $area = strtoupper($unidad->descripcion);
+        $area = strtoupper($unidad->descripcion); 
         $domicilio = $reclamo->recDomicilio;
-        $comuna = strtoupper($reclamo->comNombre);
+        $comuna = strtoupper($reclamo->comNombre);$comuna = str_replace('&NTILDE;','Ñ',$comuna);
         //$telefono = $reclamo->recTelefono;
         $email = strtoupper($reclamo->recEmail);
         
@@ -876,9 +885,10 @@ class gestion extends CI_Controller {
                 <td rowspan='2' style='width:650px'>";
                     
                         IF($area === 'MIRANDES HD y RH' || $area === 'MIRANDES CLINICA ' || $area === 'MIRANDES HD CONCEPCION' || $area === 'MIRANDES HD RANCAGUA' ){
-
+                                    $mirandes = 'si';
                                     $resumen .= "<img style='width: 20%; ' src='".base_url()."../assets/img/mirAndes.png' >";
                         }ELSE {
+                                    $mirandes = 'no';
                                     $resumen .= "<img style='width: 20%; ' src='".base_url()."../assets/img/logo_vertical_cetep.png' >";
                         }
          $resumen .="
@@ -1129,10 +1139,14 @@ class gestion extends CI_Controller {
         $headers .= "From: Calidad <calidad@cetep.cl>\r\n"; //dirección del remitente 
          IF(!empty($correoJefe)){
             $correoJefe=$correoJefe->correoDirector.",".$correoJefe->correoJefe;
-            $headers .= "bcc: griedel@cetep.cl,calidad@cetep.cl,cbarrera@cetep.cl,marcelapaz@cetep.cl,".$correoJefe."\r\n";
+            //$headers .= "bcc: griedel@cetep.cl,calidad@cetep.cl,cbarrera@cetep.cl,marcelapaz@cetep.cl,".$correoJefe."\r\n";
+            IF($mirandes==='si'){$headers .= "bcc: calidad@cetep.cl,griedel@cetep.cl,cbarrera@cetep.cl,marcelapaz@cetep.cl,dconcha@mirandes.cl,comunicaciones@cetep.cl,".$correoJefe."\r\n";}
+            ELSE {$headers .= "bcc: calidad@cetep.cl,griedel@cetep.cl,cbarrera@cetep.cl,marcelapaz@cetep.cl,comunicaciones@cetep.cl,".$correoJefe."\r\n";}
+         }ELSE {
+            IF($mirandes==='si'){$headers .= "bcc: calidad@cetep.cl,griedel@cetep.cl,cbarrera@cetep.cl,marcelapaz@cetep.cl,comunicaciones@cetep.cl,dconcha@mirandes.cl\r\n";}
+            ELSE {$headers .= "bcc: calidad@cetep.cl,griedel@cetep.cl,cbarrera@cetep.cl,comunicaciones@cetep.cl,marcelapaz@cetep.cl\r\n";}
+            //$headers .= "bcc: griedel@cetep.cl,calidad@cetep.cl,cbarrera@cetep.cl,marcelapaz@cetep.cl\r\n";
         }
-        ELSE $headers .= "bcc: griedel@cetep.cl,calidad@cetep.cl,cbarrera@cetep.cl,marcelapaz@cetep.cl\r\n";
-        
         //$headers .= "Bcc: griedel@cetep.cl";
         //$headers .= "";
         //$headers .= "cc: griedel@cetep.cl";
