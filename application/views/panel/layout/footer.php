@@ -8,7 +8,7 @@
 </style>
 <div class="row" id="foo" style=" background-color: #f4f4f2">
             <div id="footer" class="col-xs-12 activo" style="color: black" >
-            2016 &copy; Cetep. Todos los derechos reservados.
+            2018 &copy; Cetep. Todos los derechos reservados.
             </div>
 </div>
         <div class="white-backdrop"></div>

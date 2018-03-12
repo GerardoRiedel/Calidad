@@ -120,7 +120,7 @@
       	<!-- End Login box -->
      	<footer class="container">
          <div class="clearfix animated bounceinUp">
-     		<p class="lead" id="footer-text"><small>Copyright &copy; Cetep 2017, Todos los derechos reservados.</small></p>
+     		<p class="lead" id="footer-text"><small>Copyright &copy; Cetep 2018, Todos los derechos reservados.</small></p>
             </div>
      	</footer>
 

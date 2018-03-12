@@ -103,7 +103,7 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
                                 <td style="font-size: 8px"><?php echo strtoupper($item->plaNombre).' '.strtoupper($item->plaApellido); ?></td>
                                 <td style="font-size: 8px;width: 200px"><?php echo substr($item->plaDescripcion,0,200).'...'; ?></td>
                                 <td style="font-size: 8px;width: 200px"><?php echo substr($item->plaAccion,0,200).'...'; ?></td>
-                                <td style="font-size: 8px;width: 130px"><?php IF($item->plaSeguimiento!='0')echo $item->plaSeguimiento; ?></td>
+                                <td style="font-size: 8px;width: 200px"><?php IF($item->plaSeguimiento!='0')echo substr($item->plaSeguimiento,0,100).'...'; ?></td>
                                 <td style="font-size: 8px;" align="center"><?php IF(!empty($item->plaProveedor)    && $item->plaProveedor==='1')   echo 'SI' ; ?></td>
                                 <td style="font-size: 8px;" align="center"><?php IF(!empty($item->plaCliente)          && $item->plaCliente==='1')         echo 'SI' ; ?></td>
                                 <td style="font-size: 8px;" align="center"><?php IF(!empty($item->plaProfesional)  && $item->plaProfesional==='1') echo 'SI' ; ?></td>
@@ -155,7 +155,7 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
                     <?php $color='#D8D8D8';?>
                 <table>
                            <tr>
-                                <td colspan="18" align="center" style="border:1px grey solid;background-color:#424242;color:white"><b>PLANILLA PRODUCTO / SERVICIO NO CONFORME</b></td>
+                                <td colspan="19" align="center" style="border:1px grey solid;background-color:#424242;color:white"><b>PLANILLA PRODUCTO / SERVICIO NO CONFORME</b></td>
                             </tr>
                             <tr>
                                 <td style="font-size: 9px;background-color: #A9A9A9;" align="center">N</td>
@@ -208,20 +208,20 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
                                 </td>
                                 <td style="font-size: 9px;background-color: <?php echo $color; ?>"><?php if($item->plaMotivo === '1') $motivo = 'Sugerencia'; elseif($item->plaMotivo === '2') $motivo = 'Reclamo'; elseif($item->plaMotivo === '3') $motivo = 'Otro'; echo $motivo?></td>
                                 <td style="font-size: 9px;background-color: <?php echo $color; ?>"><?php echo strtoupper($item->plaNombre).' '.strtoupper($item->plaApellido); ?></td>
-                                <td style="font-size: 9px;width: 300px;background-color: <?php echo $color; ?>"><?php 
-                                                                                                                                                                                        $descripcion = str_replace('á', 'a', $item->plaDescripcion) ;$descripcion = str_replace('é', 'e', $descripcion)  ;$descripcion = str_replace('í', 'i', $descripcion) ;$descripcion = str_replace('ó', 'o', $descripcion)  ;$descripcion = str_replace('ú', 'u', $descripcion);$descripcion = str_replace('ñ', 'n', $descripcion) ; 
-                                                                                                                                                                                        echo $descripcion; 
-                                                                                                                                                                                    ?>
+                                <td style="font-size: 9px;width: 600px;background-color: <?php echo $color; ?>"><?php 
+                                                                                                                        $descripcion = str_replace('á', 'a', $item->plaDescripcion) ;$descripcion = str_replace('é', 'e', $descripcion)  ;$descripcion = str_replace('í', 'i', $descripcion) ;$descripcion = str_replace('ó', 'o', $descripcion)  ;$descripcion = str_replace('ú', 'u', $descripcion);$descripcion = str_replace('ñ', 'n', $descripcion) ; 
+                                                                                                                        echo $descripcion; 
+                                                                                                                    ?>
                                 </td>
-                                <td style="font-size: 9px;width: 200px;background-color: <?php echo $color; ?>"><?php 
-                                                                                                                                                                                        $accion = str_replace('á', 'a', $item->plaAccion) ;$accion = str_replace('é', 'e', $accion)  ;$accion = str_replace('í', 'i', $accion) ;$accion = str_replace('ó', 'o', $accion)  ;$accion = str_replace('ú', 'u', $accion) ; $accion = str_replace('ñ', 'n', $accion) ; 
-                                                                                                                                                                                        echo $accion; 
-                                                                                                                                                                                ?>
+                                <td style="font-size: 9px;width: 400px;background-color: <?php echo $color; ?>"><?php 
+                                                                                                                    $accion = str_replace('á', 'a', $item->plaAccion) ;$accion = str_replace('é', 'e', $accion)  ;$accion = str_replace('í', 'i', $accion) ;$accion = str_replace('ó', 'o', $accion)  ;$accion = str_replace('ú', 'u', $accion) ; $accion = str_replace('ñ', 'n', $accion) ; 
+                                                                                                                    echo $accion; 
+                                                                                                                ?>
                                 </td>
-                                <td style="font-size: 9px;width: 130px;background-color: <?php echo $color; ?>"><?php 
-                                                                                                                                                                                        $seguimiento = str_replace('á', 'a', $item->plaSeguimiento) ;$seguimiento = str_replace('é', 'e', $seguimiento)  ;$seguimiento = str_replace('í', 'i', $seguimiento) ;$seguimiento = str_replace('ó', 'o', $seguimiento)  ;$seguimiento = str_replace('ú', 'u', $seguimiento) ; $seguimiento = str_replace('ñ', 'n', $seguimiento) ; 
-                                                                                                                                                                                        echo $seguimiento; 
-                                                                                                                                                                                    ?>
+                                <td style="font-size: 9px;width: 600px;background-color: <?php echo $color; ?>"><?php 
+                                                                                                                    $seguimiento = str_replace('á', 'a', $item->plaSeguimiento) ;$seguimiento = str_replace('é', 'e', $seguimiento)  ;$seguimiento = str_replace('í', 'i', $seguimiento) ;$seguimiento = str_replace('ó', 'o', $seguimiento)  ;$seguimiento = str_replace('ú', 'u', $seguimiento) ; $seguimiento = str_replace('ñ', 'n', $seguimiento) ; 
+                                                                                                                    IF($seguimiento != '0')echo $seguimiento; 
+                                                                                                                ?>
                                 </td>
                                 <td style="font-size: 9px;background-color: <?php echo $color; ?>" align="center"><?php IF(!empty($item->plaTipo)  && $item->plaTipo==='1')   echo 'Neuroquirurgico' ; ELSEIF(!empty($item->plaTipo)  && $item->plaTipo==='2')   echo 'Psiquiatrico' ;ELSEIF(!empty($item->plaTipo)  && $item->plaTipo==='3')   echo 'Traumatologico ' ; ?></td>
                                 

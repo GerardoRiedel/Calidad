@@ -311,9 +311,17 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
                     </div>
                     <div class="col-lg-12"><br></div>
                     <div class="col-lg-1"></div>
-                    <div class="col-lg-10" style=" margin-left:-15px">
-                        <input type="checkbox" required <?php IF(!empty($reclamo))echo 'checked disabled'; ?> >&nbsp;
-                            <label>Entiendo y acepto que puede ser necesario acceder a la información clínica para la investigación y respuesta de este caso</label>
+                    <div class="col-lg-9" style=" margin-left:15px;">
+                        <table>
+                        <tr>
+                            <td style="width:28px">
+                                <input type="checkbox" required <?php IF(!empty($reclamo))echo 'checked disabled'; ?> >&nbsp;
+                            </td>
+                            <td>
+                                <label>Entiendo y acepto que puede ser necesario acceder a la información clínica para la investigación y respuesta de este caso</label>
+                            </td>
+                        </tr>
+                        </table>
                     </div>
                     <div class="col-lg-12"></div>
                    <div class="col-lg-1"></div>

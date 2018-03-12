@@ -24,8 +24,12 @@ IF(empty($submenu)){$submenu='';}//die($this->session->userdata('id_usuario') );
                         <li <?php if($submenu === 'planilla')  echo "class='active'" ?>><a href="<?php echo base_url("calidad/gestion/NoConforme"); ?>">Servicio No Conforme</a></li>            
                     </ul> 
             </li>
-            <?php //AGREGAR A CAROLINA REBOLLEDO ?>
-            <?php IF($this->session->userdata('id_usuario') === '286'){ ?>
+            
+            <!-- 
+            AGREGAR A USUARIO EN BRUTO:
+            CAROLINA REBOLLEDO, CAROLINA MORAGA, ANDRES MUÑOZ
+            -->
+            <?php IF($this->session->userdata('id_usuario') === '286' || $this->session->userdata('id_usuario') === '386' || $this->session->userdata('id_usuario') === '131'){ ?>
                 <li class="submenu <?php if($menu === 'listar' )echo "active open" ?>">
                     <a href=""><i class="fa fa-sitemap" aria-hidden="true" style=" width: 20px;text-align: center"></i> <span>Gestion</span> <i class="arrow fa fa-chevron-right"></i></a>
                     <ul>

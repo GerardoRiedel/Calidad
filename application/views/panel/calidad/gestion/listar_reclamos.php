@@ -55,7 +55,9 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
                                         ELSEIF($area === '2')$area= 'UNIDAD GESTION HOSPITALARIO';
                                         ELSEIF($area === '3')$area= 'UNIDAD PERITAJE CLÍNICO';
                                         ELSEIF($area === '30')$area= 'UNIDAD SALUD LABORAL';
+                                        ELSEIF($area === '11')$area= 'MIRANDES HD SANTIAGO';
                                         ELSEIF($area === '13')$area= 'MIRANDES CLÍNICA';
+                                        
                                         
                                     IF($item->recEstado === '1')$color = 'green'; 
                                     ELSEIF($item->recEstado === '2')$color = 'red'; 
