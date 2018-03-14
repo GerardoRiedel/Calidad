@@ -32,7 +32,7 @@ class Reclamo_model extends CI_Model
     }
     public function dameUno($id)
     {
-        $return[0] = $this->db->select('recId,recFecha,recFechaModificacion,recAutorizado,recNombre,recApePat,recApeMat,recRut,recArea,recDomicilio,recTelefono,recEmail,recEstado,recObservacion,recRespuesta,recApoNombre,recApoApePat,recApoApeMat,recApoVinculo,recApoRut,recApoDomicilio,recApoTelefono,recApoEmail,recApoRespuesta,recHechos,recPeticion,c.comNombre,s.comNombre comApoNombre')
+        $return[0] = $this->db->select('recId,recFecha,recFechaModificacion,recAutorizado,recNombre,recApePat,recApeMat,recRut,recArea,recDomicilio,recTelefono,recEmail,recEstado,recObservacion,recRespuesta,recApoNombre,recApoApePat,recApoApeMat,recApoVinculo,recApoRut,recApoDomicilio,recApoTelefono,recApoEmail,recApoRespuesta,recHechos,recPeticion,c.comNombre,s.comNombre comApoNombre, recConformidad')
                         ->from('reclamos')
                         ->join('comunas c','c.comId=recComuna')
                         ->join('comunas s','s.comId=recApoComuna','left')

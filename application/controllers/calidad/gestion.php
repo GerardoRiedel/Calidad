@@ -158,6 +158,7 @@ class gestion extends CI_Controller {
         $this->reclamo_model->recTelefono     = $this->input->post('telefono');
         $this->reclamo_model->recEmail           = $this->input->post('email');
         $this->reclamo_model->recRespuesta = $this->input->post('respuesta');
+        $this->reclamo_model->recConformidad = $this->input->post('check');
         $this->reclamo_model->recHechos       = $hechos;
         $this->reclamo_model->recPeticion       = $peticion;
         $this->reclamo_model->recUsuario       = $this->session->userdata('id_usuario');

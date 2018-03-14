@@ -315,7 +315,7 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
                         <table>
                         <tr>
                             <td style="width:28px">
-                                <input type="checkbox" required <?php IF(!empty($reclamo))echo 'checked disabled'; ?> >&nbsp;
+                                <input type="checkbox" id="check" name="check" <?php IF(!empty($reclamo->recConformidad) && $reclamo->recConformidad==='on')echo 'checked'; ?> >&nbsp;
                             </td>
                             <td>
                                 <label>Entiendo y acepto que puede ser necesario acceder a la información clínica para la investigación y respuesta de este caso</label>
@@ -499,6 +499,14 @@ $(".icon").hide();
 
 $("#form").submit(function () { 
     $(".icon").hide();
+    var area = $( "#area" ).val();
+    if(area != 30){
+        if($( "#check:checked" ).val() != 'on'){
+            alert('Acepte condiciones');
+        }
+    }
+    
+    
     if($("#comuna").val()==='0') {  
         $("#iconCom").show();
     }
@@ -510,6 +518,11 @@ $("#form").submit(function () {
     }
     if($('input:radio[name=respuesta]:checked').val()===undefined || $("#comuna").val()==='0' || $("#area").val()==='0'){
         return false;
+    }
+    if(area != 30){
+        if($( "#check:checked" ).val() != 'on'){
+            return false;
+        }
     }
 });
 </script>
