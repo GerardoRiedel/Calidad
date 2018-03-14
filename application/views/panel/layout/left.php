@@ -27,9 +27,9 @@ IF(empty($submenu)){$submenu='';}//die($this->session->userdata('id_usuario') );
             
             <!-- 
             AGREGAR A USUARIO EN BRUTO:
-            CAROLINA REBOLLEDO, CAROLINA MORAGA, ANDRES MUÑOZ
+            CAROLINA REBOLLEDO, CAROLINA MORAGA, ANDRES MUÑOZ, DANIELA CONCHA
             -->
-            <?php IF($this->session->userdata('id_usuario') === '286' || $this->session->userdata('id_usuario') === '386' || $this->session->userdata('id_usuario') === '131'){ ?>
+            <?php IF($this->session->userdata('id_usuario') === '286' || $this->session->userdata('id_usuario') === '386' || $this->session->userdata('id_usuario') === '131' || $this->session->userdata('id_usuario') === '368'){ ?>
                 <li class="submenu <?php if($menu === 'listar' )echo "active open" ?>">
                     <a href=""><i class="fa fa-sitemap" aria-hidden="true" style=" width: 20px;text-align: center"></i> <span>Gestion</span> <i class="arrow fa fa-chevron-right"></i></a>
                     <ul>
