@@ -376,6 +376,7 @@ class gestion extends CI_Controller {
         
         $hecho = $reclamo->recHechos;
         $peticion = $reclamo->recPeticion;
+        IF($reclamo->recConformidad==='on')$check='Si entiendo y acepto que puede ser necesario acceder a la información clínica para la investigación y respuesta de este caso';ELSE $check='';
         
         $resumen="
             Estimado $nombre,
@@ -473,8 +474,7 @@ class gestion extends CI_Controller {
                 <td colspan='5'><span style='font-size:9px'><i>Petición concreta:</i></span><br> ".$peticion."</td>
             </tr>
             <tr>
-                <td colspan='5' style='border:none'><input type='checkbox' checked>Entiendo y acepto que puede ser necesario acceder a la información clínica para la investigación y respuesta de este caso</td>
-            </tr>
+                <td colspan='5' style='border:none'>".$check."</td></tr>
             <tr>
                 <td colspan='5' style='border:none; font-size:9px'>De conformidad a lo señalado en el reglamento del MINSAL sobre procedimientos de reclamo de la ley N°20.584, le informamos su facultad para recurrir ante la Superintendencia de Salud para presentar su reclamo.</td>
             </tr>
