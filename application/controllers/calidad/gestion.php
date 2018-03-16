@@ -539,8 +539,7 @@ class gestion extends CI_Controller {
         ELSEIF(!empty($id_usuario) && $id_usuario==='141')$colaborador->idunidad=30;
              
         IF(!empty($colaborador)){
-            //IF(strtoupper($jefe->nombre) === strtoupper($colaborador->nombre) && strtoupper($jefe->apellidoPaterno) === strtoupper($colaborador->apellidoPaterno)  || $colaborador->id === '57' || $colaborador->id === '64' || $colaborador->id === '285' || $colaborador->id === '38'){
-            IF(!empty($jefe)  || $colaborador->id === '57' || $colaborador->id === '64' || $colaborador->id === '38'){
+            IF(!empty($jefe)  || $colaborador->id === '57' || $colaborador->id === '64' || $colaborador->id === '38' || $colaborador->id === '427'){
                 $data['jefeUnidad'] = 'SI';
             }
             $data['datos']    = $this->parametros_model->dameTodoUnidad($colaborador->idunidad);
@@ -576,12 +575,12 @@ class gestion extends CI_Controller {
             
         
         
-        IF(empty($colaborador->idunidad) && $this->session->userdata('id_usuario') != '64' && $this->session->userdata('id_usuario') != '38'){
+        IF(empty($colaborador->idunidad) && $this->session->userdata('id_usuario') != '64' && $this->session->userdata('id_usuario') != '38' && $this->session->userdata('id_usuario') != '427'){
             $uspUnidad = $this->parametros_model->dameUnidadRevisoras($this->session->userdata('id_usuario'));
             $this->parametros_model->plaUnidad = $uspUnidad->uspUnidad;
             $this->parametros_model->plaNombre = $uspUnidad->uspNombre;
             $this->parametros_model->plaApellido = $uspUnidad->uspApellidoP;
-        }ELSEIF($this->session->userdata('id_usuario') != '64' && $this->session->userdata('id_usuario') != '38') {
+        }ELSEIF($this->session->userdata('id_usuario') != '64' && $this->session->userdata('id_usuario') != '38' && $this->session->userdata('id_usuario') != '427') {
             $plaUnidad = $colaborador->idunidad;
             IF($plaUnidad==='25')$plaUnidad=3;
             $this->parametros_model->plaUnidad = $plaUnidad;
@@ -631,8 +630,7 @@ class gestion extends CI_Controller {
         $colaborador    = $this->parametros_model->dameColaborador($id_usuario);
         $jefe                   = $this->parametros_model->dameJefe($id_usuario);
         $data['listarTipos'] = $this->parametros_model->dameTipos();
-        //IF(strtoupper($jefe->nombre) === strtoupper($colaborador->nombre) && strtoupper($jefe->apellidoPaterno) === strtoupper($colaborador->apellidoPaterno)  || $colaborador->id === '57' || $colaborador->id === '64' || $colaborador->id === '285' || $colaborador->id === '38'){
-        IF(!empty($colaborador) && (!empty($jefe)  || $colaborador->id === '57' || $colaborador->id === '64' || $colaborador->id === '38')){
+        IF(!empty($colaborador) && (!empty($jefe)  || $colaborador->id === '57' || $colaborador->id === '64' || $colaborador->id === '38' || $colaborador->id === '427')){
             $data['jefeUnidad'] = 'SI';
             $data['datos']    = $this->parametros_model->dameTodoUnidad($colaborador->idunidad);
         }ELSE {
@@ -656,8 +654,7 @@ class gestion extends CI_Controller {
         $data['finalizado'] = 'si';
         IF(!empty($this->session->userdata('id_usuario'))){
             $colaborador    = $this->parametros_model->dameColaborador($this->session->userdata('id_usuario'));
-            //IF($colaborador->id === '57' || $colaborador->id === '64' || $colaborador->id === '285' || $colaborador->id === '38'){
-            IF(!empty($colaborador->id) && ($colaborador->id === '57' || $colaborador->id === '64' || $colaborador->id === '38')){
+            IF(!empty($colaborador->id) && ($colaborador->id === '57' || $colaborador->id === '64' || $colaborador->id === '38' || $colaborador->id === '427')){
                 $data['calidad'] = 'SI';
             }
         }
@@ -679,8 +676,7 @@ class gestion extends CI_Controller {
     {
         IF(!empty($this->session->userdata('id_usuario'))){
             $colaborador    = $this->parametros_model->dameColaborador($this->session->userdata('id_usuario'));
-            //IF($colaborador->id === '57' || $colaborador->id === '64' || $colaborador->id === '285' || $colaborador->id === '38'){
-            IF(!empty($colaborador->id) && ($colaborador->id === '57' || $colaborador->id === '64' || $colaborador->id === '38')){
+            IF(!empty($colaborador->id) && ($colaborador->id === '57' || $colaborador->id === '64' || $colaborador->id === '38' || $colaborador->id === '427')){
                 $data['calidad'] = 'SI';
             }
         }
@@ -729,7 +725,7 @@ class gestion extends CI_Controller {
         
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// ENVIAR
  //    $enviar='on';
-        IF(($enviar === 'off' && !empty($recId) && empty($colaborador) && $autorizado==='si' ) || ($autorizado==='si' && $enviar === 'off' && !empty($recId) && $colaborador->id !== '57' && $colaborador->id !== '64' && $colaborador->id !== '38' )){
+        IF(($enviar === 'off' && !empty($recId) && empty($colaborador) && $autorizado==='si' ) || ($autorizado==='si' && $enviar === 'off' && !empty($recId) && $colaborador->id !== '57' && $colaborador->id !== '64' && $colaborador->id !== '38' && $colaborador->id !== '427' )){
                     $this->reclamo_model->recId = $recId;
                     $this->reclamo_model->recEstado = 4;
                     $this->reclamo_model->recFechaModificacion = date('Y-m-d H:i:s');
@@ -763,7 +759,7 @@ class gestion extends CI_Controller {
                     }
                     ELSE $this->listar_reclamos();
             
-        }ELSEIF(($enviar === 'off' && !empty($recId) && empty($colaborador) && $autorizado==='no') || ($autorizado==='no' && $enviar === 'off' && !empty($recId) && $colaborador->id !== '57' && $colaborador->id !== '64' && $colaborador->id !== '38' )){
+        }ELSEIF(($enviar === 'off' && !empty($recId) && empty($colaborador) && $autorizado==='no') || ($autorizado==='no' && $enviar === 'off' && !empty($recId) && $colaborador->id !== '57' && $colaborador->id !== '64' && $colaborador->id !== '38' && $colaborador->id !== '427' )){
                     $this->reclamo_model->recId = $recId;
                     $this->reclamo_model->recEstado = 6;
                     $this->reclamo_model->recFechaModificacion = date('Y-m-d H:i:s');

@@ -102,7 +102,7 @@ class Login extends CI_Controller
                 IF(!empty($colaborador->idunidad)){
                             $jefe                   = $this->parametros_model->dameJefe($id);
                             //die(var_dump($jefe));
-                            IF($id === '57' || $id === '64' || $id === '38'){
+                            IF($id === '57' || $id === '64' || $id === '38'|| $id === '427'){
                                 $data = array(
                                                     'acceso_ok'     =>  'OK',
                                                     'id_usuario'         =>  $id,
@@ -201,7 +201,7 @@ class Login extends CI_Controller
 				//die($check_user);
                                 ////////////REVISORAS///////////////
                 //             die($check_user['uspJefe'].$check_user['uspId']);
-				if(($check_user['uspJefe'] === '0' || $check_user['uspJefe'] === 0) && $check_user['uspId'] !== '57' && $check_user['uspId'] !== '64' && $check_user['uspId'] !== '38')
+				if(($check_user['uspJefe'] === '0' || $check_user['uspJefe'] === 0) && $check_user['uspId'] !== '57' && $check_user['uspId'] !== '64' && $check_user['uspId'] !== '38' && $check_user['uspId'] !== '427')
 				{
 
                                                                                 $data = array(
@@ -224,7 +224,7 @@ class Login extends CI_Controller
 
 				} 
                                 //////////////////JEFE UNIDAD///////////////////////
-                                                                            elseif($check_user['uspId'] === '57' || $check_user['uspId'] === '64' || $check_user['uspId'] === '38')
+                                                                            elseif($check_user['uspId'] === '57' || $check_user['uspId'] === '64' || $check_user['uspId'] === '38' || $check_user['uspId'] === '427')
 				{
 
                                                                                 $data = array(
