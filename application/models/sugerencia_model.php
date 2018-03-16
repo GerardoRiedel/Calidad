@@ -43,7 +43,7 @@ class Sugerencia_model extends CI_Model
     }
     public function dameTodo()
     {
-        return $this->db->select('sugId,sugFecha,sugNombre,sugRut,sugApePat,sugApeMat,sugDomicilio,sugTelefono,sugEmail,sugHechos,c.comNombre')
+        return $this->db->select('sugId,sugFecha,sugNombre,sugRut,sugApePat,sugApeMat,sugDomicilio,sugTelefono,sugEmail,sugHechos,c.comNombre,sugDestinatario,sugUnidad')
                         ->from('sugerencias')
                         ->join('comunas c','c.comId=sugComuna')
                         ->where('sugEstado <',5)

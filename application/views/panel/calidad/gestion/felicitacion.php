@@ -154,10 +154,10 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: tr
                         <div class="col-lg-2">
                             <label>Email nuevo destinatario</label>
                         </div>
-                        <div class='col-lg-4'>
+                        <div class='col-lg-5'>
                             <input name="sugId" type="hidden" value="<?php IF(!empty($data->sugId))echo $data->sugId; ?>">
-                        
-                            <input name="emailDestino" type=   "text" minlength="9" required pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$" title="Ingrese un correo valido, ej: mail@ejemplo.com"   >
+                            <input name="emailDestino" style="width:90%" type="text" minlength="9" required title="Ingrese un correo valido, ej: mail@ejemplo.com"  value="<?php IF(!empty($data->sugDestinatario))echo $data->sugDestinatario; ?>" >
+                            <br><span style="font-size:10px">Separe por "," (coma) multiple destinatarios</span>
                         </div>
                     <?php } ?>
                     <div class="col-lg-12" ><hr></div>       

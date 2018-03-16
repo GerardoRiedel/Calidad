@@ -62,6 +62,11 @@ class gestion extends CI_Controller {
     {
         $id=$this->input->post('sugId');
         $dest=$this->input->post('emailDestino');
+        
+        $this->sugerencia_model->sugId = $id;
+        $this->sugerencia_model->sugDestinatario = $dest;
+        $this->sugerencia_model->guardar();
+        
         $this->envioSugerencia($id,$dest);
     }
     public function felicitacion()

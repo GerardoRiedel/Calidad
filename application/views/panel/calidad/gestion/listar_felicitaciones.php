@@ -25,6 +25,7 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
                             <tr>
                                 <th style="display:none"></th>
                                 <th>Fecha Registro</th>
+                                <th>Unidad</th>
                                 <th>Run</th>
                                 <th style=" display: none">Run</th>
                                 <th>Nombre</th>
@@ -37,17 +38,29 @@ box-shadow: -2px 2px 41px 2px rgba(0,0,0,0.75);z-index: 25; background-color: #d
                         </thead>
                         <tbody>
                                 <?php foreach ($felicitaciones as $item) : ?>
+                            <?php IF(!empty($item->sugDestinatario))$color='color:green'; ELSE $color=''; ?>
+                            <?php       
+                                $area = $item->sugUnidad;
+                                IF($area === '10')$area= 'IMPULSA'; 
+                                ELSEIF($area === '4')$area= 'UNIDAD ATENCIÓN CLÍNICA';
+                                ELSEIF($area === '2')$area= 'UNIDAD GESTION HOSPITALARIO';
+                                ELSEIF($area === '3')$area= 'UNIDAD PERITAJE CLÍNICO';
+                                ELSEIF($area === '30')$area= 'UNIDAD SALUD LABORAL';
+                                ELSEIF($area === '11')$area= 'MIRANDES HD SANTIAGO';
+                                ELSEIF($area === '13')$area= 'MIRANDES CLÍNICA';
+                            ?>
                             <tr>
-                                <td style="display:none;"><?php $date = new DateTime($item->sugFecha);echo $date->format('Y-m-d');?></td>
-                                <td style=" border-left: transparent;font-size:9px"><?php $date = new DateTime($item->sugFecha);echo $date->format('d-m-Y');//echo $item->id; ?></td>
-                                <td style="font-size:9px"><?php if(!empty($item->sugRut)) echo formatearRut($item->sugRut); ?></td>
+                                <td style="display:none;<?php echo $color; ?>"><?php $date = new DateTime($item->sugFecha);echo $date->format('Y-m-d');?></td>
+                                <td style="border-left: transparent;font-size:9px;<?php echo $color; ?>"><?php $date = new DateTime($item->sugFecha);echo $date->format('d-m-Y');//echo $item->id; ?></td>
+                                <td style="font-size:9px;<?php echo $color; ?>"><?php echo $area; ?></td>
+                                <td style="font-size:9px;<?php echo $color; ?>"><?php if(!empty($item->sugRut)) echo formatearRut($item->sugRut); ?></td>
                                 <td style="display:none"><?php if(!empty($item->sugRut)) echo $item->sugRut; ?></td>
-                                <td style="font-size:9px"><?php echo strtoupper($item->sugNombre).' '.strtoupper($item->sugApePat).' '.strtoupper($item->sugApeMat); ?></td>
-                                <td style="font-size:9px"><?php echo strtoupper($item->sugDomicilio).', '.strtoupper($item->comNombre); ?></td>
-                                <td style="font-size:9px"><?php echo $item->sugTelefono; ?></td>
-                                <td style="font-size:9px"><?php echo strtoupper($item->sugEmail); ?></td>
-                                <td style="font-size:9px;width:400px"><?php echo $item->sugHechos; ?></td>
-                                <td align="center">
+                                <td style="font-size:9px;<?php echo $color; ?>"><?php echo strtoupper($item->sugNombre).' '.strtoupper($item->sugApePat).' '.strtoupper($item->sugApeMat); ?></td>
+                                <td style="font-size:9px;<?php echo $color; ?>"><?php echo strtoupper($item->sugDomicilio).', '.strtoupper($item->comNombre); ?></td>
+                                <td style="font-size:9px;<?php echo $color; ?>"><?php echo $item->sugTelefono; ?></td>
+                                <td style="font-size:9px;<?php echo $color; ?>"><?php echo strtoupper($item->sugEmail); ?></td>
+                                <td style="font-size:9px;width:400px;<?php echo $color; ?>"><?php echo $item->sugHechos; ?></td>
+                                <td align="center" style="<?php echo $color; ?>">
                                   <a class="tip-bottom" title="Ver" href="<?php echo base_url("calidad/gestion/cargarReenviarFelicitacion/".$item->sugId )?>"><i class="fa fa-paper-plane" aria-hidden="true"></i></a>
                                 </td>
                             </tr>
